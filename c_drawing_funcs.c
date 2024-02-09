@@ -38,16 +38,19 @@ uint8_t get_b(uint32_t color){
 uint8_t get_a(uint32_t color){
 	// TODO
 }
-uint8_t blend_components(uint32_t fg, uint32_t bg, uint32_t alpha){
+uint8_t blend_component(uint32_t fg, uint32_t bg, uint32_t alpha){
 	// TODO
 }
+
 uint32_t blend_colors(uint32_t fg, uint32_t bg){
-	// TODO
+	uint32_t opacity = get_a(fg);
 }
+
 void set_pixel(struct Image *img, uint32_t index, uint32_t color){
 	uint32_t newColor = blend_colors(color, img->data[index]);
 	img->data[index] = newColor;
 }
+
 int64_t square(int64_t x){
 	return x * x;
 }
