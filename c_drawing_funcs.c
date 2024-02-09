@@ -12,7 +12,13 @@
 // TODO: implement helper functions
 
 int32_t in_bounds(struct Image *img, int32_t x, int32_t y){
-	// TODO
+	if(x < 0 || x >= img->width){
+		return 0;
+	}
+	if(y < 0 || y >= img->height){
+		return 0;
+	}
+	return 1;
 } 
 uint32_t compute_index(struct Image *img, int32_t x, int32_t y){
 	// TODO
@@ -39,13 +45,24 @@ uint32_t blend_colors(uint32_t fg, uint32_t bg){
 	// TODO
 }
 void set_pixel(struct Image *img, uint32_t index, uint32_t color){
-	// TODO
+	uint32_t newColor = blend_colors(color, img->data[index]);
+	img->data[index] = newColor;
 }
 int64_t square(int64_t x){
-	// TODO
+	return x * x;
 }
 int64_t square_dist(int64_t x1, int64_t y1, int64_t x2, int64_t y2){
-	// TODO
+	return square(x2-x1) + square(y2-y1);
+}
+
+//checks if a pixel is contained in a circle(inclusive) and if so
+//returns 1 = contained
+//returns 0 = outside the circle
+int is_in_circle(struct Image* image, int32_t center_x, int32_t center_y, int32_t x, int32_t y, int32_t radius){
+	if(square_dist(center_x, center_y, x, y) <= radius){
+		return 1;
+	}
+	return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
