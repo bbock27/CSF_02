@@ -12,13 +12,7 @@
 // TODO: implement helper functions
 
 int32_t in_bounds(struct Image *img, int32_t x, int32_t y){
-	if(x < 0 || x >= img->width){
-		return 0;
-	}
-	if(y < 0 || y >= img->height){
-		return 0;
-	}
-	return 1;
+
 } 
 uint32_t compute_index(struct Image *img, int32_t x, int32_t y){
 	// TODO
