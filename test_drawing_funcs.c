@@ -84,6 +84,31 @@ void test_draw_circle_clip(TestObjs *objs);
 void test_draw_tile(TestObjs *objs);
 void test_draw_sprite(TestObjs *objs);
 
+// prototypes of test functions for helper function
+void test_set_Nth_bit(TestObjs *objs);
+void test_get_Nth_bit(TestObjs *objs);
+void test_in_bounds(TestObjs *objs);
+void test_compute_index(TestObjs *objs);
+void test_clamp(TestObjs *objs);
+void test_get_r(TestObjs *objs);
+void test_get_g(TestObjs *objs);
+void test_get_b(TestObjs *objs);
+void test_get_a(TestObjs *objs);
+void test_set_r(TestObjs *objs);
+void test_set_g(TestObjs *objs);
+void test_set_b(TestObjs *objs);
+void test_set_a(TestObjs *objs);
+void test_blend_color(TestObjs *objs);
+void test_make_color(TestObjs *objs);
+void test_blend_components(TestObjs *objs);
+void test_blend_colors(TestObjs *objs);
+void test_set_pixel(TestObjs *objs);
+void test_square(TestObjs *objs);
+void test_square_dist(TestObjs *objs);
+void test_is_in_circle(TestObjs *objs);
+void test_is_in_range(TestObjs *objs);
+void test_is_in_rect(TestObjs *objs);
+
 int main(int argc, char **argv) {
   if (argc > 1) {
     // user specified a specific test function to run
@@ -99,6 +124,30 @@ int main(int argc, char **argv) {
   TEST(test_draw_circle_clip);
   TEST(test_draw_tile);
   TEST(test_draw_sprite);
+
+	TEST(test_set_Nth_bit);
+	TEST(test_get_Nth_bit);
+	TEST(test_in_bounds);
+	TEST(test_compute_index);
+	TEST(test_clamp);
+	TEST(test_get_r);
+	TEST(test_get_g);
+	TEST(test_get_b);
+	TEST(test_get_a);
+	TEST(test_set_r);
+	TEST(test_set_g);
+	TEST(test_set_b);
+	TEST(test_set_a);
+	TEST(test_blend_color);
+	TEST(test_make_color);
+	TEST(test_blend_components);
+	TEST(test_blend_colors);
+	TEST(test_set_pixel);
+	TEST(test_square);
+	TEST(test_square_dist);
+	TEST(test_is_in_circle);
+	TEST(test_is_in_range);
+	TEST(test_is_in_rect);
 
   TEST_FINI();
 }
@@ -261,4 +310,75 @@ void test_draw_sprite(TestObjs *objs) {
   };
 
   check_picture(&objs->large, &pic);
+}
+
+
+void test_set_Nth_bit(TestObjs *objs){
+	
+}
+void test_get_Nth_bit(TestObjs *objs){
+	
+}
+void test_in_bounds(TestObjs *objs){
+	
+}
+void test_compute_index(TestObjs *objs){
+	
+}
+void test_clamp(TestObjs *objs){
+	
+}
+void test_get_r(TestObjs *objs){
+	
+}
+void test_get_g(TestObjs *objs){
+	
+}
+void test_get_b(TestObjs *objs){
+	
+}
+void test_get_a(TestObjs *objs){
+	
+}
+void test_set_r(TestObjs *objs){
+	
+}
+void test_set_g(TestObjs *objs){
+	
+}
+void test_set_b(TestObjs *objs){
+	
+}
+void test_set_a(TestObjs *objs){
+	
+}
+void test_blend_color(TestObjs *objs){
+	
+}
+void test_make_color(TestObjs *objs){
+	
+}
+void test_blend_components(TestObjs *objs){
+	
+}
+void test_blend_colors(TestObjs *objs){
+	
+}
+void test_set_pixel(TestObjs *objs){
+	
+}
+void test_square(TestObjs *objs){
+	
+}
+void test_square_dist(TestObjs *objs){
+	
+}
+void test_is_in_circle(TestObjs *objs){
+	
+}
+void test_is_in_range(TestObjs *objs){
+	
+}
+void test_is_in_rect(TestObjs *objs){
+	
 }
