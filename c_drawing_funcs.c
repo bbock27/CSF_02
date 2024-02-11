@@ -96,11 +96,6 @@ uint32_t make_color(uint8_t r, uint8_t g, uint8_t b){
 
 uint32_t blend_components(uint32_t fg, uint32_t bg, uint32_t alpha){
 	// TODO
-	// uint32_t newColor = set_r(bg, get_r(fg), alpha);
-	// newColor = set_g(bg, get_g(fg), alpha);
-	// newColor = set_b(bg, get_b(fg), alpha);
-	// newColor = set_a(bg, 255);
-	// return newColor;
 	uint8_t bg_r = get_r(bg);
 	uint8_t bg_g = get_g(bg);
 	uint8_t bg_b = get_b(bg);
@@ -125,7 +120,6 @@ uint32_t blend_colors(uint32_t fg, uint32_t bg){
 //sets the pixel at the specified index to color. NO BLENDING
 //precondition: index is bounds for the image
 void set_pixel(struct Image *img, uint32_t index, uint32_t color){
-	// uint32_t newColor = blend_colors(color, img->data[index]);
 	img->data[index] = color;
 }
 
