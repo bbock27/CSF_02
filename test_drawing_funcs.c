@@ -526,30 +526,30 @@ void test_set_g(TestObjs *objs){
 	uint32_t color3 = 0x264c80ff;
 	uint32_t color4 = 0x314e90ff;
 
-	ASSERT(set_r(color1, 0x12) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x12) == 0x100000ff);
-	ASSERT(set_r(color3, 0x12) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x12) == 0x314e90ff);
+	ASSERT(set_g(color1, 0x12) == 0xef12e2ff);
+	ASSERT(set_g(color2, 0x12) == 0x101200ff);
+	ASSERT(set_g(color3, 0x12) == 0x261280ff);
+	ASSERT(set_g(color4, 0x12) == 0x311290ff);
 
-	ASSERT(set_r(color1, 0x00) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x00) == 0x100000ff);
-	ASSERT(set_r(color3, 0x00) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x00) == 0x314e90ff);
+	ASSERT(set_g(color1, 0x00) == 0xef00e2ff);
+	ASSERT(set_g(color2, 0x00) == 0x100000ff);
+	ASSERT(set_g(color3, 0x00) == 0x260080ff);
+	ASSERT(set_g(color4, 0x00) == 0x310090ff);
 
-	ASSERT(set_r(color1, 0xFF) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0xFF) == 0x100000ff);
-	ASSERT(set_r(color3, 0xFF) == 0x264c80ff);
-	ASSERT(set_r(color4, 0xFF) == 0x314e90ff);
+	ASSERT(set_g(color1, 0xFF) == 0xefFFe2ff);
+	ASSERT(set_g(color2, 0xFF) == 0x10FF00ff);
+	ASSERT(set_g(color3, 0xFF) == 0x26FF80ff);
+	ASSERT(set_g(color4, 0xFF) == 0x31FF90ff);
 
-	ASSERT(set_r(color1, 0x80) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x80) == 0x100000ff);
-	ASSERT(set_r(color3, 0x80) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x80) == 0x314e90ff);
+	ASSERT(set_g(color1, 0x80) == 0xef80e2ff);
+	ASSERT(set_g(color2, 0x80) == 0x108000ff);
+	ASSERT(set_g(color3, 0x80) == 0x268080ff);
+	ASSERT(set_g(color4, 0x80) == 0x318090ff);
 
-	ASSERT(set_r(color1, 0x05) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x05) == 0x100000ff);
-	ASSERT(set_r(color3, 0x05) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x05) == 0x314e90ff);
+	ASSERT(set_g(color1, 0x05) == 0xef05e2ff);
+	ASSERT(set_g(color2, 0x05) == 0x100500ff);
+	ASSERT(set_g(color3, 0x05) == 0x260580ff);
+	ASSERT(set_g(color4, 0x05) == 0x310590ff);
 }
 void test_set_b(TestObjs *objs){
 	
@@ -558,30 +558,30 @@ void test_set_b(TestObjs *objs){
 	uint32_t color3 = 0x264c80ff;
 	uint32_t color4 = 0x314e90ff;
 
-	ASSERT(set_r(color1, 0x12) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x12) == 0x100000ff);
-	ASSERT(set_r(color3, 0x12) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x12) == 0x314e90ff);
+	ASSERT(set_b(color1, 0x12) == 0xefea12ff);
+	ASSERT(set_b(color2, 0x12) == 0x100012ff);
+	ASSERT(set_b(color3, 0x12) == 0x264c12ff);
+	ASSERT(set_b(color4, 0x12) == 0x314e12ff);
 
-	ASSERT(set_r(color1, 0x00) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x00) == 0x100000ff);
-	ASSERT(set_r(color3, 0x00) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x00) == 0x314e90ff);
+	ASSERT(set_b(color1, 0x00) == 0xefea00ff);
+	ASSERT(set_b(color2, 0x00) == 0x100000ff);
+	ASSERT(set_b(color3, 0x00) == 0x264c00ff);
+	ASSERT(set_b(color4, 0x00) == 0x314e00ff);
 
-	ASSERT(set_r(color1, 0xFF) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0xFF) == 0x100000ff);
-	ASSERT(set_r(color3, 0xFF) == 0x264c80ff);
-	ASSERT(set_r(color4, 0xFF) == 0x314e90ff);
+	ASSERT(set_b(color1, 0xFF) == 0xefeaFFff);
+	ASSERT(set_b(color2, 0xFF) == 0x1000FFff);
+	ASSERT(set_b(color3, 0xFF) == 0x264cFFff);
+	ASSERT(set_b(color4, 0xFF) == 0x314eFFff);
 
-	ASSERT(set_r(color1, 0x80) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x80) == 0x100000ff);
-	ASSERT(set_r(color3, 0x80) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x80) == 0x314e90ff);
+	ASSERT(set_b(color1, 0x80) == 0xefea80ff);
+	ASSERT(set_b(color2, 0x80) == 0x100080ff);
+	ASSERT(set_b(color3, 0x80) == 0x264c80ff);
+	ASSERT(set_b(color4, 0x80) == 0x314e80ff);
 
-	ASSERT(set_r(color1, 0x05) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x05) == 0x100000ff);
-	ASSERT(set_r(color3, 0x05) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x05) == 0x314e90ff);
+	ASSERT(set_b(color1, 0x05) == 0xefea05ff);
+	ASSERT(set_b(color2, 0x05) == 0x100005ff);
+	ASSERT(set_b(color3, 0x05) == 0x264c05ff);
+	ASSERT(set_b(color4, 0x05) == 0x314e05ff);
 }
 void test_set_a(TestObjs *objs){
 	
@@ -590,30 +590,30 @@ void test_set_a(TestObjs *objs){
 	uint32_t color3 = 0x264c80ff;
 	uint32_t color4 = 0x314e90ff;
 
-	ASSERT(set_r(color1, 0x12) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x12) == 0x100000ff);
-	ASSERT(set_r(color3, 0x12) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x12) == 0x314e90ff);
+	ASSERT(set_a(color1, 0x12) == 0xefeae212);
+	ASSERT(set_a(color2, 0x12) == 0x10000012);
+	ASSERT(set_a(color3, 0x12) == 0x264c8012);
+	ASSERT(set_a(color4, 0x12) == 0x314e9012);
 
-	ASSERT(set_r(color1, 0x00) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x00) == 0x100000ff);
-	ASSERT(set_r(color3, 0x00) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x00) == 0x314e90ff);
+	ASSERT(set_a(color1, 0x00) == 0xefeae200);
+	ASSERT(set_a(color2, 0x00) == 0x10000000);
+	ASSERT(set_a(color3, 0x00) == 0x264c8000);
+	ASSERT(set_a(color4, 0x00) == 0x314e9000);
 
-	ASSERT(set_r(color1, 0xFF) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0xFF) == 0x100000ff);
-	ASSERT(set_r(color3, 0xFF) == 0x264c80ff);
-	ASSERT(set_r(color4, 0xFF) == 0x314e90ff);
+	ASSERT(set_a(color1, 0xFF) == 0xefeae2FF);
+	ASSERT(set_a(color2, 0xFF) == 0x100000FF);
+	ASSERT(set_a(color3, 0xFF) == 0x264c80FF);
+	ASSERT(set_a(color4, 0xFF) == 0x314e90FF);
 
-	ASSERT(set_r(color1, 0x80) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x80) == 0x100000ff);
-	ASSERT(set_r(color3, 0x80) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x80) == 0x314e90ff);
+	ASSERT(set_a(color1, 0x80) == 0xefeae280);
+	ASSERT(set_a(color2, 0x80) == 0x10000080);
+	ASSERT(set_a(color3, 0x80) == 0x264c8080);
+	ASSERT(set_a(color4, 0x80) == 0x314e9080);
 
-	ASSERT(set_r(color1, 0x05) == 0xefeae2ff);
-	ASSERT(set_r(color2, 0x05) == 0x100000ff);
-	ASSERT(set_r(color3, 0x05) == 0x264c80ff);
-	ASSERT(set_r(color4, 0x05) == 0x314e90ff);
+	ASSERT(set_a(color1, 0x05) == 0xefeae205);
+	ASSERT(set_a(color2, 0x05) == 0x10000005);
+	ASSERT(set_a(color3, 0x05) == 0x264c8005);
+	ASSERT(set_a(color4, 0x05) == 0x314e9005);
 }
 void test_blend_color(TestObjs *objs){
 	
