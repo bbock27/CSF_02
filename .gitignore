@@ -408,3 +408,10 @@ diff/example06_diff.png
 diff/example07_diff.png
 diff/secret01_diff.png
 diff/secret02_diff.png
+
+asm_test_drawing_funcs
+c_draw
+c_drawing_funcs.o
+c_test_drawing_funcs
+c_test_drawing_funcs_secret
+test_drawing_funcs.o

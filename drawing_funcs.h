@@ -22,7 +22,7 @@ uint8_t get_b(uint32_t color);
 
 uint8_t get_a(uint32_t color);
 
-uint64_t set_Nth_bit(uint32_t x, uint32_t n, uint8_t bit);
+uint32_t set_Nth_bit(uint32_t x, uint32_t n, uint8_t bit);
 
 uint8_t get_Nth_bit(uint32_t x, uint32_t n);
 
