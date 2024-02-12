@@ -56,7 +56,7 @@ int is_in_circle(struct Image* image, int32_t center_x, int32_t center_y, int32_
 //inclusive bounds check
 //returns 1 if in bounds
 //returns 0 if out of bounds
-int is_is_range(uint32_t val, uint32_t min, uint32_t max);
+int is_in_range(uint32_t val, uint32_t min, uint32_t max);
 
 //checks if a pixel is contained in a rectangle(inclusive) and if so
 //returns 1 = contained

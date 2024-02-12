@@ -321,6 +321,7 @@ void test_set_Nth_bit(TestObjs *objs){
 	num = set_Nth_bit(num, 4, 0);
 	ASSERT(num == 0);
 }
+
 void test_get_Nth_bit(TestObjs *objs){
   uint32_t color = 0x314e90ff;
 	ASSERT(get_Nth_bit(color, 0) == 1);
@@ -361,15 +362,62 @@ void test_get_Nth_bit(TestObjs *objs){
 	
 
 }
+
 void test_in_bounds(TestObjs *objs){
-	
+
+	//past top left corner
+	ASSERT(in_bounds(&objs->small, -1, 0) == 0);
+	ASSERT(in_bounds(&objs->small, 0, -1) == 0);
+
+	//past top right corner
+	ASSERT(in_bounds(&objs->small, 0, 8) == 0);
+	ASSERT(in_bounds(&objs->small, 7, -1) == 0);
+
+	//past bottom left corner
+	ASSERT(in_bounds(&objs->small, 0, 6) == 0);
+	ASSERT(in_bounds(&objs->small, -1, 5) == 0);
+
+	//past bottom right corner
+	ASSERT(in_bounds(&objs->small, 8, 5) == 0);
+	ASSERT(in_bounds(&objs->small, 7, 6) == 0);
+
+	//check corners(in bounds)
+	ASSERT(in_bounds(&objs->small, 0, 0) == 1);
+	ASSERT(in_bounds(&objs->small, 0, 7) == 1);
+	ASSERT(in_bounds(&objs->small, 0, 5) == 1);
+	ASSERT(in_bounds(&objs->small, 7, 5) == 1);
+
+	//random points in the middle
+	ASSERT(in_bounds(&objs->small, 3, 5) == 1);
+	ASSERT(in_bounds(&objs->small, 5, 4) == 1);
+	ASSERT(in_bounds(&objs->small, 2, 2) == 1);
+
+
+
 }
+
 void test_compute_index(TestObjs *objs){
 	
+	for(int i = 0; i < SMALL_W; i++){
+		for(int j = 0; j < SMALL_H; j++){
+			ASSERT(compute_index(&objs->small, i, j) == SMALL_IDX(i, j));
+		}
+	}
+
+	int counter = 0;
+	for(int i = 0; i < LARGE_W; i++){
+		for(int j = 0; j < LARGE_H; j++){
+			ASSERT(compute_index(&objs->large, i, j) == counter);
+			counter++;
+		}
+	}
+	
 }
+
 void test_clamp(TestObjs *objs){
 	
 }
+
 void test_get_r(TestObjs *objs){
 	uint32_t color1 = 0x000000ff;
 	uint32_t color2 = 0x800080ff;
@@ -387,6 +435,7 @@ void test_get_r(TestObjs *objs){
 	ASSERT(get_r(color7) == 0x31);
 	
 }
+
 void test_get_g(TestObjs *objs){
 	uint32_t color1 = 0x000000ff;
 	uint32_t color2 = 0x800080ff;
@@ -403,6 +452,7 @@ void test_get_g(TestObjs *objs){
 	ASSERT(get_g(color6) == 0x4c);
 	ASSERT(get_g(color7) == 0x4e);
 }
+
 void test_get_b(TestObjs *objs){
 	uint32_t color1 = 0x000000ff;
 	uint32_t color2 = 0x800080ff;
@@ -419,6 +469,7 @@ void test_get_b(TestObjs *objs){
 	ASSERT(get_b(color6) == 0x80);
 	ASSERT(get_b(color7) == 0x90);
 }
+
 void test_get_a(TestObjs *objs){
 	uint32_t color1 = 0x000000ff;
 	uint32_t color2 = 0x800080ff;
@@ -435,17 +486,134 @@ void test_get_a(TestObjs *objs){
 	ASSERT(get_a(color6) == 0xff);
 	ASSERT(get_a(color7) == 0xff);
 }
+
 void test_set_r(TestObjs *objs){
-	
+	uint32_t color1 = 0xefeae2ff;
+	uint32_t color2 = 0x100000ff;
+	uint32_t color3 = 0x264c80ff;
+	uint32_t color4 = 0x314e90ff;
+
+	ASSERT(set_r(color1, 0x12) == 0x12eae2ff);
+	ASSERT(set_r(color2, 0x12) == 0x120000ff);
+	ASSERT(set_r(color3, 0x12) == 0x12eae2ff);
+	ASSERT(set_r(color4, 0x12) == 0x124c80ff);
+
+	ASSERT(set_r(color1, 0x00) == 0x00eae2ff);
+	ASSERT(set_r(color2, 0x00) == 0x000000ff);
+	ASSERT(set_r(color3, 0x00) == 0x00eae2ff);
+	ASSERT(set_r(color4, 0x00) == 0x004c80ff);
+
+	ASSERT(set_r(color1, 0xFF) == 0xFFeae2ff);
+	ASSERT(set_r(color2, 0xFF) == 0xFF0000ff);
+	ASSERT(set_r(color3, 0xFF) == 0xFFeae2ff);
+	ASSERT(set_r(color4, 0xFF) == 0xFF4c80ff);
+
+	ASSERT(set_r(color1, 0x80) == 0x80eae2ff);
+	ASSERT(set_r(color2, 0x80) == 0x800000ff);
+	ASSERT(set_r(color3, 0x80) == 0x80eae2ff);
+	ASSERT(set_r(color4, 0x80) == 0x804c80ff);
+
+	ASSERT(set_r(color1, 0x05) == 0x05eae2ff);
+	ASSERT(set_r(color2, 0x05) == 0x050000ff);
+	ASSERT(set_r(color3, 0x05) == 0x05eae2ff);
+	ASSERT(set_r(color4, 0x05) == 0x054c80ff);
+
 }
 void test_set_g(TestObjs *objs){
-	
+
+	uint32_t color1 = 0xefeae2ff;
+	uint32_t color2 = 0x100000ff;
+	uint32_t color3 = 0x264c80ff;
+	uint32_t color4 = 0x314e90ff;
+
+	ASSERT(set_r(color1, 0x12) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x12) == 0x100000ff);
+	ASSERT(set_r(color3, 0x12) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x12) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x00) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x00) == 0x100000ff);
+	ASSERT(set_r(color3, 0x00) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x00) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0xFF) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0xFF) == 0x100000ff);
+	ASSERT(set_r(color3, 0xFF) == 0x264c80ff);
+	ASSERT(set_r(color4, 0xFF) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x80) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x80) == 0x100000ff);
+	ASSERT(set_r(color3, 0x80) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x80) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x05) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x05) == 0x100000ff);
+	ASSERT(set_r(color3, 0x05) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x05) == 0x314e90ff);
 }
 void test_set_b(TestObjs *objs){
 	
+	uint32_t color1 = 0xefeae2ff;
+	uint32_t color2 = 0x100000ff;
+	uint32_t color3 = 0x264c80ff;
+	uint32_t color4 = 0x314e90ff;
+
+	ASSERT(set_r(color1, 0x12) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x12) == 0x100000ff);
+	ASSERT(set_r(color3, 0x12) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x12) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x00) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x00) == 0x100000ff);
+	ASSERT(set_r(color3, 0x00) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x00) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0xFF) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0xFF) == 0x100000ff);
+	ASSERT(set_r(color3, 0xFF) == 0x264c80ff);
+	ASSERT(set_r(color4, 0xFF) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x80) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x80) == 0x100000ff);
+	ASSERT(set_r(color3, 0x80) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x80) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x05) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x05) == 0x100000ff);
+	ASSERT(set_r(color3, 0x05) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x05) == 0x314e90ff);
 }
 void test_set_a(TestObjs *objs){
 	
+	uint32_t color1 = 0xefeae2ff;
+	uint32_t color2 = 0x100000ff;
+	uint32_t color3 = 0x264c80ff;
+	uint32_t color4 = 0x314e90ff;
+
+	ASSERT(set_r(color1, 0x12) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x12) == 0x100000ff);
+	ASSERT(set_r(color3, 0x12) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x12) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x00) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x00) == 0x100000ff);
+	ASSERT(set_r(color3, 0x00) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x00) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0xFF) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0xFF) == 0x100000ff);
+	ASSERT(set_r(color3, 0xFF) == 0x264c80ff);
+	ASSERT(set_r(color4, 0xFF) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x80) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x80) == 0x100000ff);
+	ASSERT(set_r(color3, 0x80) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x80) == 0x314e90ff);
+
+	ASSERT(set_r(color1, 0x05) == 0xefeae2ff);
+	ASSERT(set_r(color2, 0x05) == 0x100000ff);
+	ASSERT(set_r(color3, 0x05) == 0x264c80ff);
+	ASSERT(set_r(color4, 0x05) == 0x314e90ff);
 }
 void test_blend_color(TestObjs *objs){
 	
@@ -519,7 +687,12 @@ void test_is_in_circle(TestObjs *objs){
 
 }
 void test_is_in_range(TestObjs *objs){
-	
+
+	uint32_t min = 8;
+	uint32_t max = 40;
+	for(int i = 0; i < 80; i++){
+		ASSERT(is_in_range(i, min, max) == (i >= min || i <= max) ? 1 : 0);
+	}
 }
 void test_is_in_rect(TestObjs *objs){
 	struct Rect r = { .x = 2, .y = 2, .width = 3, .height = 3};
