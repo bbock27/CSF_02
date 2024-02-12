@@ -11,6 +11,40 @@
 
 // TODO: implement helper functions
 
+int32_t in_bounds(struct Image *img, int32_t x, int32_t y) {
+  return ((x >= 0 && x < img->width) && (y >= 0 && y < img->height)); // do they want a boolean or int32_t...?
+}
+
+uint32_t compute_index(struct Image *img, int32_t x, int32_t y) {
+  return ((img->height - y - 1) * img->width) + x; // double cbheck
+}
+
+int32_t clamp(int32_t val, int32_t min, int32_t max) {
+  if(val < min) {
+    return min;
+  }
+  else if(val > max) {
+    return max;
+  }
+  return val;
+}
+
+uint8_t get_r(uint32_t color) {
+  return (color >> 24) & 0xFF; // right shift to cut off all bits up to 24; this applies to the other gets respectively
+}
+
+uint8_t get_g(uint32_t color) {
+  return (color >> 16) & 0xFF;
+}
+
+uint8_t get_b(uint32_t color) {
+  return (color >> 8) & 0xFF;
+}
+
+uint8_t get_a(uint32_t color){ 
+  return color & 0xFF;
+}
+
 ////////////////////////////////////////////////////////////////////////
 // API functions
 ////////////////////////////////////////////////////////////////////////
