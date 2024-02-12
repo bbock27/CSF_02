@@ -16,11 +16,12 @@
 // TODO: implement helper functions
 
 int32_t in_bounds(struct Image *img, int32_t x, int32_t y) {
+	
   return ((x >= 0 && x < img->width) && (y >= 0 && y < img->height)); // do they want a boolean or int32_t...?
 }
 
 uint32_t compute_index(struct Image *img, int32_t x, int32_t y) {
-  return (y * img->width) + x; // double cbheck
+	return img->width*y + x;
 }
 
 int32_t clamp(int32_t val, int32_t min, int32_t max) {

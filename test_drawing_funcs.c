@@ -383,7 +383,7 @@ void test_in_bounds(TestObjs *objs){
 
 	//check corners(in bounds)
 	ASSERT(in_bounds(&objs->small, 0, 0) == 1);
-	ASSERT(in_bounds(&objs->small, 0, 7) == 1);
+	ASSERT(in_bounds(&objs->small, 7, 0) == 1);
 	ASSERT(in_bounds(&objs->small, 0, 5) == 1);
 	ASSERT(in_bounds(&objs->small, 7, 5) == 1);
 
@@ -405,9 +405,10 @@ void test_compute_index(TestObjs *objs){
 	}
 
 	int counter = 0;
-	for(int i = 0; i < LARGE_W; i++){
-		for(int j = 0; j < LARGE_H; j++){
-			ASSERT(compute_index(&objs->large, i, j) == counter);
+	for(int i = 0; i < LARGE_H; i++){
+		for(int j = 0; j < LARGE_W; j++){
+			printf("%d\n", counter);
+			ASSERT(compute_index(&objs->large, j, i) == counter);
 			counter++;
 		}
 	}
@@ -495,28 +496,28 @@ void test_set_r(TestObjs *objs){
 
 	ASSERT(set_r(color1, 0x12) == 0x12eae2ff);
 	ASSERT(set_r(color2, 0x12) == 0x120000ff);
-	ASSERT(set_r(color3, 0x12) == 0x12eae2ff);
-	ASSERT(set_r(color4, 0x12) == 0x124c80ff);
+	ASSERT(set_r(color3, 0x12) == 0x124c80ff);
+	ASSERT(set_r(color4, 0x12) == 0x124e90ff);
 
 	ASSERT(set_r(color1, 0x00) == 0x00eae2ff);
 	ASSERT(set_r(color2, 0x00) == 0x000000ff);
-	ASSERT(set_r(color3, 0x00) == 0x00eae2ff);
-	ASSERT(set_r(color4, 0x00) == 0x004c80ff);
+	ASSERT(set_r(color3, 0x00) == 0x004c80ff);
+	ASSERT(set_r(color4, 0x00) == 0x004e90ff);
 
 	ASSERT(set_r(color1, 0xFF) == 0xFFeae2ff);
 	ASSERT(set_r(color2, 0xFF) == 0xFF0000ff);
-	ASSERT(set_r(color3, 0xFF) == 0xFFeae2ff);
-	ASSERT(set_r(color4, 0xFF) == 0xFF4c80ff);
+	ASSERT(set_r(color3, 0xFF) == 0xFF4c80ff);
+	ASSERT(set_r(color4, 0xFF) == 0xFF4e90ff);
 
 	ASSERT(set_r(color1, 0x80) == 0x80eae2ff);
 	ASSERT(set_r(color2, 0x80) == 0x800000ff);
-	ASSERT(set_r(color3, 0x80) == 0x80eae2ff);
-	ASSERT(set_r(color4, 0x80) == 0x804c80ff);
+	ASSERT(set_r(color3, 0x80) == 0x804c80ff);
+	ASSERT(set_r(color4, 0x80) == 0x804e90ff);
 
 	ASSERT(set_r(color1, 0x05) == 0x05eae2ff);
 	ASSERT(set_r(color2, 0x05) == 0x050000ff);
-	ASSERT(set_r(color3, 0x05) == 0x05eae2ff);
-	ASSERT(set_r(color4, 0x05) == 0x054c80ff);
+	ASSERT(set_r(color3, 0x05) == 0x054c80ff);
+	ASSERT(set_r(color4, 0x05) == 0x054e90ff);
 
 }
 void test_set_g(TestObjs *objs){
@@ -691,7 +692,7 @@ void test_is_in_range(TestObjs *objs){
 	uint32_t min = 8;
 	uint32_t max = 40;
 	for(int i = 0; i < 80; i++){
-		ASSERT(is_in_range(i, min, max) == (i >= min || i <= max) ? 1 : 0);
+		ASSERT(is_in_range(i, min, max) == (i >= min && i <= max) ? 1 : 0);
 	}
 }
 void test_is_in_rect(TestObjs *objs){
