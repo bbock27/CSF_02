@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,6 +85,31 @@ void test_draw_circle_clip(TestObjs *objs);
 void test_draw_tile(TestObjs *objs);
 void test_draw_sprite(TestObjs *objs);
 
+// prototypes of test functions for helper function
+void test_set_Nth_bit(TestObjs *objs);
+void test_get_Nth_bit(TestObjs *objs);
+void test_in_bounds(TestObjs *objs);
+void test_compute_index(TestObjs *objs);
+void test_clamp(TestObjs *objs);
+void test_get_r(TestObjs *objs);
+void test_get_g(TestObjs *objs);
+void test_get_b(TestObjs *objs);
+void test_get_a(TestObjs *objs);
+void test_set_r(TestObjs *objs);
+void test_set_g(TestObjs *objs);
+void test_set_b(TestObjs *objs);
+void test_set_a(TestObjs *objs);
+void test_blend_color(TestObjs *objs);
+void test_make_color(TestObjs *objs);
+void test_blend_components(TestObjs *objs);
+void test_blend_colors(TestObjs *objs);
+void test_set_pixel(TestObjs *objs);
+void test_square(TestObjs *objs);
+void test_square_dist(TestObjs *objs);
+void test_is_in_circle(TestObjs *objs);
+void test_is_in_range(TestObjs *objs);
+void test_is_in_rect(TestObjs *objs);
+
 int main(int argc, char **argv) {
   if (argc > 1) {
     // user specified a specific test function to run
@@ -93,12 +119,36 @@ int main(int argc, char **argv) {
   TEST_INIT();
 
   // TODO: add TEST() directives for your helper functions
-  TEST(test_draw_pixel);
-  TEST(test_draw_rect);
-  TEST(test_draw_circle);
-  TEST(test_draw_circle_clip);
-  TEST(test_draw_tile);
-  TEST(test_draw_sprite);
+  // TEST(test_draw_pixel);
+  // TEST(test_draw_rect);
+  // TEST(test_draw_circle);
+  // TEST(test_draw_circle_clip);
+  // TEST(test_draw_tile);
+  // TEST(test_draw_sprite);
+
+	TEST(test_set_Nth_bit);
+	TEST(test_get_Nth_bit);
+	TEST(test_in_bounds);
+	TEST(test_compute_index);
+	TEST(test_clamp);
+	TEST(test_get_r);
+	TEST(test_get_g);
+	TEST(test_get_b);
+	TEST(test_get_a);
+	TEST(test_set_r);
+	TEST(test_set_g);
+	TEST(test_set_b);
+	TEST(test_set_a);
+	TEST(test_blend_color);
+	TEST(test_make_color);
+	TEST(test_blend_components);
+	TEST(test_blend_colors);
+	TEST(test_set_pixel);
+	TEST(test_square);
+	TEST(test_square_dist);
+	TEST(test_is_in_circle);
+	TEST(test_is_in_range);
+	TEST(test_is_in_rect);
 
   TEST_FINI();
 }
@@ -261,4 +311,248 @@ void test_draw_sprite(TestObjs *objs) {
   };
 
   check_picture(&objs->large, &pic);
+}
+
+
+void test_set_Nth_bit(TestObjs *objs){
+	uint32_t num = 0;
+	num = set_Nth_bit(num, 4, 1);
+	ASSERT(num == 16);
+	num = set_Nth_bit(num, 4, 0);
+	ASSERT(num == 0);
+}
+void test_get_Nth_bit(TestObjs *objs){
+  uint32_t color = 0x314e90ff;
+	ASSERT(get_Nth_bit(color, 0) == 1);
+	ASSERT(get_Nth_bit(color, 1) == 1);
+	ASSERT(get_Nth_bit(color, 2) == 1);
+	ASSERT(get_Nth_bit(color, 3) == 1);
+	ASSERT(get_Nth_bit(color, 4) == 1);
+	ASSERT(get_Nth_bit(color, 5) == 1);
+	ASSERT(get_Nth_bit(color, 6) == 1);
+	ASSERT(get_Nth_bit(color, 7) == 1);
+
+	ASSERT(get_Nth_bit(color, 8) == 0);
+	ASSERT(get_Nth_bit(color, 9) == 0);
+	ASSERT(get_Nth_bit(color, 10) == 0);
+	ASSERT(get_Nth_bit(color, 11) == 0);
+	ASSERT(get_Nth_bit(color, 12) == 1);
+	ASSERT(get_Nth_bit(color, 13) == 0);
+	ASSERT(get_Nth_bit(color, 14) == 0);
+	ASSERT(get_Nth_bit(color, 15) == 1);
+
+	ASSERT(get_Nth_bit(color, 16) == 0);
+	ASSERT(get_Nth_bit(color, 17) == 1);
+	ASSERT(get_Nth_bit(color, 18) == 1);
+	ASSERT(get_Nth_bit(color, 19) == 1);
+	ASSERT(get_Nth_bit(color, 20) == 0);
+	ASSERT(get_Nth_bit(color, 21) == 0);
+	ASSERT(get_Nth_bit(color, 22) == 1);
+	ASSERT(get_Nth_bit(color, 23) == 0);
+
+	ASSERT(get_Nth_bit(color, 24) == 1);
+	ASSERT(get_Nth_bit(color, 25) == 0);
+	ASSERT(get_Nth_bit(color, 26) == 0);
+	ASSERT(get_Nth_bit(color, 27) == 0);
+	ASSERT(get_Nth_bit(color, 28) == 1);
+	ASSERT(get_Nth_bit(color, 29) == 1);
+	ASSERT(get_Nth_bit(color, 30) == 0);
+	ASSERT(get_Nth_bit(color, 31) == 0);
+	
+
+}
+void test_in_bounds(TestObjs *objs){
+	
+}
+void test_compute_index(TestObjs *objs){
+	
+}
+void test_clamp(TestObjs *objs){
+	
+}
+void test_get_r(TestObjs *objs){
+	uint32_t color1 = 0x000000ff;
+	uint32_t color2 = 0x800080ff;
+	uint32_t color3 = 0x9cadc1ff;
+	uint32_t color4 = 0xefeae2ff;
+	uint32_t color5 = 0x100000ff;
+	uint32_t color6 = 0x264c80ff;
+	uint32_t color7 = 0x314e90ff;
+	ASSERT(get_r(color1) == 0x00);
+	ASSERT(get_r(color2) == 0x80);
+	ASSERT(get_r(color3) == 0x9c);
+	ASSERT(get_r(color4) == 0xef);
+	ASSERT(get_r(color5) == 0x10);
+	ASSERT(get_r(color6) == 0x26);
+	ASSERT(get_r(color7) == 0x31);
+	
+}
+void test_get_g(TestObjs *objs){
+	uint32_t color1 = 0x000000ff;
+	uint32_t color2 = 0x800080ff;
+	uint32_t color3 = 0x9cadc1ff;
+	uint32_t color4 = 0xefeae2ff;
+	uint32_t color5 = 0x100000ff;
+	uint32_t color6 = 0x264c80ff;
+	uint32_t color7 = 0x314e90ff;
+	ASSERT(get_g(color1) == 0x00);
+	ASSERT(get_g(color2) == 0x00);
+	ASSERT(get_g(color3) == 0xad);
+	ASSERT(get_g(color4) == 0xea);
+	ASSERT(get_g(color5) == 0x00);
+	ASSERT(get_g(color6) == 0x4c);
+	ASSERT(get_g(color7) == 0x4e);
+}
+void test_get_b(TestObjs *objs){
+	uint32_t color1 = 0x000000ff;
+	uint32_t color2 = 0x800080ff;
+	uint32_t color3 = 0x9cadc1ff;
+	uint32_t color4 = 0xefeae2ff;
+	uint32_t color5 = 0x100000ff;
+	uint32_t color6 = 0x264c80ff;
+	uint32_t color7 = 0x314e90ff;
+	ASSERT(get_b(color1) == 0x00);
+	ASSERT(get_b(color2) == 0x80);
+	ASSERT(get_b(color3) == 0xc1);
+	ASSERT(get_b(color4) == 0xe2);
+	ASSERT(get_b(color5) == 0x00);
+	ASSERT(get_b(color6) == 0x80);
+	ASSERT(get_b(color7) == 0x90);
+}
+void test_get_a(TestObjs *objs){
+	uint32_t color1 = 0x000000ff;
+	uint32_t color2 = 0x800080ff;
+	uint32_t color3 = 0x9cadc1ff;
+	uint32_t color4 = 0xefeae2ff;
+	uint32_t color5 = 0x100000ff;
+	uint32_t color6 = 0x264c80ff;
+	uint32_t color7 = 0x314e90ff;
+	ASSERT(get_a(color1) == 0xff);
+	ASSERT(get_a(color2) == 0xff);
+	ASSERT(get_a(color3) == 0xff);
+	ASSERT(get_a(color4) == 0xff);
+	ASSERT(get_a(color5) == 0xff);
+	ASSERT(get_a(color6) == 0xff);
+	ASSERT(get_a(color7) == 0xff);
+}
+void test_set_r(TestObjs *objs){
+	
+}
+void test_set_g(TestObjs *objs){
+	
+}
+void test_set_b(TestObjs *objs){
+	
+}
+void test_set_a(TestObjs *objs){
+	
+}
+void test_blend_color(TestObjs *objs){
+	
+}
+void test_make_color(TestObjs *objs){
+	
+}
+void test_blend_components(TestObjs *objs){
+	
+}
+void test_blend_colors(TestObjs *objs){
+	
+}
+void test_set_pixel(TestObjs *objs){
+	
+}
+void test_square(TestObjs *objs){
+	
+}
+void test_square_dist(TestObjs *objs){
+	
+}
+void test_is_in_circle(TestObjs *objs){
+	ASSERT(is_in_circle(&objs->small, 3, 2, 0, 0, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 1, 0, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 2, 0, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 3, 0, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 4, 0, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 5, 0, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 6, 0, 2) == 0);
+	
+	ASSERT(is_in_circle(&objs->small, 3, 2, 0, 1, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 1, 1, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 2, 1, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 3, 1, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 4, 1, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 5, 1, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 6, 1, 2) == 0);
+
+	ASSERT(is_in_circle(&objs->small, 3, 2, 0, 2, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 1, 2, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 2, 2, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 3, 2, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 4, 2, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 5, 2, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 6, 2, 2) == 0);
+
+	ASSERT(is_in_circle(&objs->small, 3, 2, 0, 3, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 1, 3, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 2, 3, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 3, 3, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 4, 3, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 5, 3, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 6, 3, 2) == 0);
+
+	ASSERT(is_in_circle(&objs->small, 3, 2, 0, 4, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 1, 4, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 2, 4, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 3, 4, 2) == 1);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 4, 4, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 5, 4, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 6, 4, 2) == 0);
+
+	ASSERT(is_in_circle(&objs->small, 3, 2, 0, 5, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 1, 5, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 2, 5, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 3, 5, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 4, 5, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 5, 5, 2) == 0);
+	ASSERT(is_in_circle(&objs->small, 3, 2, 6, 5, 2) == 0);
+
+}
+void test_is_in_range(TestObjs *objs){
+	
+}
+void test_is_in_rect(TestObjs *objs){
+	struct Rect r = { .x = 2, .y = 2, .width = 3, .height = 3};
+
+	ASSERT(is_in_rect(&(objs->small), &r, 1, 1) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 2, 1) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 3, 1) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 4, 1) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 5, 1) == 0);
+
+	ASSERT(is_in_rect(&(objs->small), &r, 1, 2) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 2, 2) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 3, 2) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 4, 2) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 5, 2) == 0);
+
+	ASSERT(is_in_rect(&(objs->small), &r, 1, 3) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 2, 3) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 3, 3) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 4, 3) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 5, 3) == 0);
+
+	ASSERT(is_in_rect(&(objs->small), &r, 1, 4) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 2, 4) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 3, 4) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 4, 4) == 1);
+	ASSERT(is_in_rect(&(objs->small), &r, 5, 4) == 0);
+
+	ASSERT(is_in_rect(&(objs->small), &r, 1, 5) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 2, 5) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 3, 5) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 4, 5) == 0);
+	ASSERT(is_in_rect(&(objs->small), &r, 5, 5) == 0);
+	
+	
 }
