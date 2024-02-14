@@ -23,7 +23,6 @@ int32_t in_bounds(struct Image *img, int32_t x, int32_t y) {
 
 uint32_t compute_index(struct Image *img, int32_t x, int32_t y) {
 	return img->width*y + x;
-  // return ((img->height - y - 1) * img->width) + x; // double cbheck
 }
 
 int32_t clamp(int32_t val, int32_t min, int32_t max) {
