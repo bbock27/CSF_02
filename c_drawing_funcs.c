@@ -17,6 +17,7 @@
 
 int32_t in_bounds(struct Image *img, int32_t x, int32_t y) {
 	
+	
   return ((x >= 0 && x < img->width) && (y >= 0 && y < img->height)); // do they want a boolean or int32_t...?
 }
 
@@ -63,28 +64,24 @@ uint8_t get_Nth_bit(uint32_t x, uint32_t n) {
 }
 
 uint32_t set_r(uint32_t color, uint8_t r_component){
-	uint32_t newColor = 0;
 	for(int i = 24; i <= 31; i++){
 		color = set_Nth_bit(color, i, get_Nth_bit(r_component, i-24));
 	}
 	return color;
 }
 uint32_t set_g(uint32_t color, uint8_t g_component){
-	uint32_t newColor = 0;
 	for(int i = 16; i <= 23; i++){
 		color = set_Nth_bit(color, i, get_Nth_bit(g_component, i-16));
 	}
 	return color;
 }
 uint32_t set_b(uint32_t color, uint8_t b_component){
-	uint32_t newColor = 0;
 	for(int i = 8; i <= 15; i++){
 		color = set_Nth_bit(color, i, get_Nth_bit(b_component, i-8));
 	}
 	return color;
 }
 uint32_t set_a(uint32_t color, uint8_t a_component){
-	uint32_t newColor = 0;
 	for(int i = 0; i <= 7; i++){
 		color = set_Nth_bit(color, i, get_Nth_bit(a_component, i));
 	}
@@ -106,8 +103,9 @@ uint32_t make_color(uint8_t r, uint8_t g, uint8_t b){
 	return newColor;
 }
 
-uint32_t blend_components(uint32_t fg, uint32_t bg, uint32_t alpha){
-	// TODO
+
+uint32_t blend_colors(uint32_t fg, uint32_t bg){
+	uint32_t opacity = get_a(fg);
 	uint8_t bg_r = get_r(bg);
 	uint8_t bg_g = get_g(bg);
 	uint8_t bg_b = get_b(bg);
@@ -116,17 +114,12 @@ uint32_t blend_components(uint32_t fg, uint32_t bg, uint32_t alpha){
 	uint8_t fg_g = get_g(fg);
 	uint8_t fg_b = get_b(fg);
 
-	uint8_t blended_r = blend_color(fg_r, bg_r, alpha);
-	uint8_t blended_g = blend_color(fg_g, bg_g, alpha);
-	uint8_t blended_b = blend_color(fg_b, bg_b, alpha);
+	uint8_t blended_r = blend_color(fg_r, bg_r, opacity);
+	uint8_t blended_g = blend_color(fg_g, bg_g, opacity);
+	uint8_t blended_b = blend_color(fg_b, bg_b, opacity);
 
 	return make_color(blended_r, blended_g, blended_b);
-
-}
-
-uint32_t blend_colors(uint32_t fg, uint32_t bg){
-	uint32_t opacity = get_a(fg);
-	return blend_components(fg, bg, opacity);
+	// return blend_components(fg, bg, opacity);
 }
 
 //sets the pixel at the specified index to color. NO BLENDING

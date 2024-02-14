@@ -38,8 +38,6 @@ uint8_t blend_color(uint8_t fg, uint8_t bg, uint8_t opacity);
 
 uint32_t make_color(uint8_t r, uint8_t g, uint8_t b);
 
-uint32_t blend_components(uint32_t fg, uint32_t bg, uint32_t alpha);
-
 uint32_t blend_colors(uint32_t fg, uint32_t bg);
 
 //sets the pixel at the specified index to color. NO BLENDING

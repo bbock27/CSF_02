@@ -6,8 +6,12 @@ make
 
 printf "\n\nSecret:\n"
 ./c_test_drawing_funcs_secret
+
+printf "\nSecret test 1\n"
+./c_draw out/secret01.png < input/secret01.in
 compare -metric RMSE out/secret01.png expected/secret01.png diff/secret01_diff.png
-printf "\n"
+printf "\ntest 2\n"
+./c_draw out/secret02.png < input/secret02.in
 compare -metric RMSE out/secret02.png expected/secret02.png diff/secret02_diff.png
 
 
