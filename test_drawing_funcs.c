@@ -404,7 +404,11 @@ void test_compute_index(TestObjs *objs){
 }
 
 void test_clamp(TestObjs *objs){
-	
+	ASSERT(clamp(90, 88, 95) == 90);
+	ASSERT(clamp(87, 88, 95) == 88);
+	ASSERT(clamp(97, 88, 95) == 95);
+	ASSERT(clamp(97, 95, 95) == 95);
+	ASSERT(clamp(93, 95, 95) == 95);
 }
 
 void test_get_r(TestObjs *objs){
@@ -422,7 +426,6 @@ void test_get_r(TestObjs *objs){
 	ASSERT(get_r(color5) == 0x10);
 	ASSERT(get_r(color6) == 0x26);
 	ASSERT(get_r(color7) == 0x31);
-	
 }
 
 void test_get_g(TestObjs *objs){

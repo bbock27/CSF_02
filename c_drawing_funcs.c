@@ -128,6 +128,7 @@ void set_pixel(struct Image *img, uint32_t index, uint32_t color){
 int64_t square(int64_t x){
 	return x * x;
 }
+
 int64_t square_dist(int64_t x1, int64_t y1, int64_t x2, int64_t y2){
 	return square(x2-x1) + square(y2-y1);
 }
