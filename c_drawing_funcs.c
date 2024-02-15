@@ -144,10 +144,10 @@ int is_in_circle(struct Image* image, int32_t center_x, int32_t center_y, int32_
 	return 0;
 }
 
-//inclusive bounds check on unsigned bounds and value
+//inclusive bounds check on bounds and value
 //returns 1 if in bounds
 //returns 0 if out of bounds
-int is_in_range(uint32_t val, uint32_t min, uint32_t max){
+int is_in_range(int32_t val, int32_t min, int32_t max){
 	if(val >= min && val <= max){
 		return 1;
 	}
@@ -158,7 +158,7 @@ int is_in_range(uint32_t val, uint32_t min, uint32_t max){
 //returns 1 = contained
 //returns 0 = outside the rectangle
 int is_in_rect(struct Image* image, const struct Rect* rect, int32_t x, int32_t y){
-	if(is_in_range(x, rect->x, rect->x+rect->width-1) && is_in_range(y, rect->y, rect->height+rect->y-1)){
+	if(is_in_range(x, rect->x, rect->x + rect->width - 1) && is_in_range(y, rect->y, rect->height+rect->y-1)){
 		return 1;
 	}
 	return 0;
