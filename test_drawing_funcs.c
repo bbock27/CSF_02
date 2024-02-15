@@ -101,7 +101,6 @@ void test_set_b(TestObjs *objs);
 void test_set_a(TestObjs *objs);
 void test_blend_color(TestObjs *objs);
 void test_make_color(TestObjs *objs);
-void test_blend_components(TestObjs *objs);
 void test_blend_colors(TestObjs *objs);
 void test_set_pixel(TestObjs *objs);
 void test_square(TestObjs *objs);
@@ -119,12 +118,12 @@ int main(int argc, char **argv) {
   TEST_INIT();
 
   // TODO: add TEST() directives for your helper functions
-  // TEST(test_draw_pixel);
-  // TEST(test_draw_rect);
-  // TEST(test_draw_circle);
-  // TEST(test_draw_circle_clip);
-  // TEST(test_draw_tile);
-  // TEST(test_draw_sprite);
+  TEST(test_draw_pixel);
+  TEST(test_draw_rect);
+  TEST(test_draw_circle);
+  TEST(test_draw_circle_clip);
+  TEST(test_draw_tile);
+  TEST(test_draw_sprite);
 
 	TEST(test_set_Nth_bit);
 	TEST(test_get_Nth_bit);
@@ -141,7 +140,6 @@ int main(int argc, char **argv) {
 	TEST(test_set_a);
 	TEST(test_blend_color);
 	TEST(test_make_color);
-	TEST(test_blend_components);
 	TEST(test_blend_colors);
 	TEST(test_set_pixel);
 	TEST(test_square);
@@ -407,7 +405,6 @@ void test_compute_index(TestObjs *objs){
 	int counter = 0;
 	for(int i = 0; i < LARGE_H; i++){
 		for(int j = 0; j < LARGE_W; j++){
-			printf("%d\n", counter);
 			ASSERT(compute_index(&objs->large, j, i) == counter);
 			counter++;
 		}
@@ -616,19 +613,48 @@ void test_set_a(TestObjs *objs){
 	ASSERT(set_a(color3, 0x05) == 0x264c8005);
 	ASSERT(set_a(color4, 0x05) == 0x314e9005);
 }
-void test_blend_color(TestObjs *objs){
-	
+
+
+void test_blend_color(TestObjs *objs) {
+  ASSERT(blend_color(0xff, 0xee, 0) == 0xee);
+  ASSERT(blend_color(0x0b, 0x11, 0x1f) == 16);
+  ASSERT(blend_color(0x11, 0x12, 0x1f) == 17);
+  ASSERT(blend_color(0x43, 0xe1, 0x1f) == 205);
 }
+
+void test_blend_colors(TestObjs *objs) {
+  ASSERT(blend_colors(0x43110b1f, 0xe1121100) == 0xcd1110ff);
+}
+
 void test_make_color(TestObjs *objs){
-	
+	ASSERT(make_color(0xff, 0x34, 0xfe) == 0xff34feff);
 }
-void test_blend_components(TestObjs *objs){
-	
-}
-void test_blend_colors(TestObjs *objs){
-	
-}
+
+
 void test_set_pixel(TestObjs *objs){
+	set_pixel(&objs->small, 8, 0x95748364);
+	ASSERT(objs->small.data[8] == 0x95748364);
+
+	set_pixel(&objs->small, 8, 0x95748364);
+	ASSERT(objs->small.data[8] == 0x95748364);	
+	
+	set_pixel(&objs->small, 8, 0x95748364);
+	ASSERT(objs->small.data[8] == 0x95748364);	
+	
+	set_pixel(&objs->small, 8, 0x95748364);
+	ASSERT(objs->small.data[8] == 0x95748364);	
+	
+	set_pixel(&objs->small, 8, 0x95748364);
+	ASSERT(objs->small.data[8] == 0x95748364);	
+	
+	set_pixel(&objs->small, 8, 0x95748364);
+	ASSERT(objs->small.data[8] == 0x95748364);	
+	
+	set_pixel(&objs->small, 8, 0x95748364);
+	ASSERT(objs->small.data[8] == 0x95748364);	
+	
+	set_pixel(&objs->small, 8, 0x95748364);
+	ASSERT(objs->small.data[8] == 0x95748364);
 	
 }
 void test_square(TestObjs *objs){
