@@ -14,9 +14,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 int32_t in_bounds(struct Image *img, int32_t x, int32_t y) {
-	
-	
-  return ((x >= 0 && x < img->width) && (y >= 0 && y < img->height)); // do they want a boolean or int32_t...?
+	return ((x >= 0 && x < img->width) && (y >= 0 && y < img->height)); // do they want a boolean or int32_t...?
 }
 
 uint32_t compute_index(struct Image *img, int32_t x, int32_t y) {
@@ -24,40 +22,40 @@ uint32_t compute_index(struct Image *img, int32_t x, int32_t y) {
 }
 
 int32_t clamp(int32_t val, int32_t min, int32_t max) {
-  if(val < min) {
-    return min;
-  }
-  else if(val > max) {
-    return max;
-  }
-  return val;
+	if(val < min) {
+    	return min;
+	}
+	else if(val > max) {
+    	return max;
+	}
+	return val;
 }
 
 uint8_t get_r(uint32_t color) {
-  return (color >> 24) & 0xFF; // right shift to cut off all bits up to 24; this applies to the other gets respectively
+	return (color >> 24) & 0xFF; // right shift to cut off all bits up to 24; this applies to the other gets respectively
 }
 
 uint8_t get_g(uint32_t color) {
-  return (color >> 16) & 0xFF;
+	return (color >> 16) & 0xFF;
 }
 
 uint8_t get_b(uint32_t color) {
-  return (color >> 8) & 0xFF;
+	return (color >> 8) & 0xFF;
 }
 
 uint8_t get_a(uint32_t color){ 
-  return color & 0xFF;
+	return color & 0xFF;
 }
 
 uint32_t set_Nth_bit(uint32_t x, uint32_t n, uint8_t bit) {
-  if(bit){
-    return x | (1UL<<n);
-  }
-  return x & (~((1UL)<<n));
+	if(bit){
+		return x | (1UL<<n);
+	}
+	return x & (~((1UL)<<n));
 }
 
 uint8_t get_Nth_bit(uint32_t x, uint32_t n) {
-  return (x & (1UL<<n) ? 1:0);
+	return (x & (1UL<<n) ? 1:0);
 }
 
 uint32_t set_r(uint32_t color, uint8_t r_component){
@@ -66,18 +64,21 @@ uint32_t set_r(uint32_t color, uint8_t r_component){
 	}
 	return color;
 }
+
 uint32_t set_g(uint32_t color, uint8_t g_component){
 	for(int i = 16; i <= 23; i++){
 		color = set_Nth_bit(color, i, get_Nth_bit(g_component, i-16));
 	}
 	return color;
 }
+
 uint32_t set_b(uint32_t color, uint8_t b_component){
 	for(int i = 8; i <= 15; i++){
 		color = set_Nth_bit(color, i, get_Nth_bit(b_component, i-8));
 	}
 	return color;
 }
+
 uint32_t set_a(uint32_t color, uint8_t a_component){
 	for(int i = 0; i <= 7; i++){
 		color = set_Nth_bit(color, i, get_Nth_bit(a_component, i));
@@ -99,7 +100,6 @@ uint32_t make_color(uint8_t r, uint8_t g, uint8_t b){
 	newColor = set_a(newColor, 255);
 	return newColor;
 }
-
 
 uint32_t blend_colors(uint32_t fg, uint32_t bg){
 	uint32_t opacity = get_a(fg);
@@ -169,8 +169,6 @@ int rect_in_img(struct Image* image, const struct Rect* rect){
 	return 0;
 }
 
-
-
 void draw_pixel_no_blending(struct Image *img, int32_t x, int32_t y, uint32_t color){
 	if(!in_bounds(img, x, y)){
 		return;
@@ -200,7 +198,6 @@ void draw_pixel(struct Image *img, int32_t x, int32_t y, uint32_t color) {
 	uint32_t index = compute_index(img, x, y);
 	uint32_t newColor = blend_colors(color, img->data[index]);
 	set_pixel(img, index, newColor);
-
 }
 
 //
@@ -216,18 +213,13 @@ void draw_pixel(struct Image *img, int32_t x, int32_t y, uint32_t color) {
 void draw_rect(struct Image *img,
                const struct Rect *rect,
                uint32_t color) {
-
 	for(int i = 0; i < img->width; i++){
 		for(int j = 0; j < img->height; j++){
-
 			if(is_in_rect(img, rect, i, j)){
 				draw_pixel(img, i, j, color);
 			}
-
 		}
 	}
-
-
 }
 
 //
@@ -244,7 +236,6 @@ void draw_rect(struct Image *img,
 void draw_circle(struct Image *img,
                  int32_t x, int32_t y, int32_t r,
                  uint32_t color) {
-
 	for(int i = 0; i < img->width; i++){
 		for(int j = 0; j < img->height; j++){
 			if(is_in_circle(img, x, y, i, j, r)){
@@ -254,7 +245,6 @@ void draw_circle(struct Image *img,
 			}
 		}
 	}
-
 }
 
 //
@@ -275,8 +265,7 @@ void draw_tile(struct Image *img,
                int32_t x, int32_t y,
                struct Image *tilemap,
                const struct Rect *tile) {
- // TODO: implement
- 	if(!rect_in_img(tilemap, tile)){
+	if(!rect_in_img(tilemap, tile)){
 		return;
 	}
 	for(uint32_t i = 0; i < tile->width; i++){
@@ -284,7 +273,7 @@ void draw_tile(struct Image *img,
 			if(in_bounds(img, x+i, j+y) && in_bounds(tilemap, i+tile->x, j+tile->y)){
 				uint32_t tilemap_index = compute_index(tilemap, i+tile->x, j+tile->y);
 				draw_pixel_no_blending(img, x+i, j+y, tilemap->data[tilemap_index]);
-        // set_pixel(img, img_index, tilemap->data[tilemap_index]);
+        		// set_pixel(img, img_index, tilemap->data[tilemap_index]);
 				// img->data[img_index] = tilemap->data[tilemap_index];
 			}
 		}
@@ -311,12 +300,9 @@ void draw_sprite(struct Image *img,
                  int32_t x, int32_t y,
                  struct Image *spritemap,
                  const struct Rect *sprite) {
-  // TODO: implement
-
 	if(!rect_in_img(spritemap, sprite)){
 		return;
 	}
-
 	for(uint32_t i = 0; i < sprite->width; i++){
 		for(uint32_t j = 0; j < sprite->height; j++){
 			if(in_bounds(img, x+i, j+y) && in_bounds(spritemap, i+sprite->x, j+sprite->y)){
@@ -324,7 +310,6 @@ void draw_sprite(struct Image *img,
         uint32_t sprite_index = compute_index(spritemap, i+sprite->x, j+sprite->y);
         // uint32_t newColor = blend_colors(spritemap->data[sprite_index], img->data[img_index]);
         // set_pixel(img, img_index, newColor);
-
 				draw_pixel(img, x+i, j+y, spritemap->data[sprite_index]);
 				// img->data[compute_index(img, x+i+tile->x, j+y+tile->y)] = tilemap->data[compute_index(tilemap, i+tile->x, j+tile->y)];
 			}
