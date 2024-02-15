@@ -13,11 +13,8 @@
 // Helper functions
 ////////////////////////////////////////////////////////////////////////
 
-// TODO: implement helper functions
-
 int32_t in_bounds(struct Image *img, int32_t x, int32_t y) {
-	
-  return ((x >= 0 && x < img->width) && (y >= 0 && y < img->height)); // do they want a boolean or int32_t...?
+  return ((x >= 0 && x < img->width) && (y >= 0 && y < img->height));
 }
 
 uint32_t compute_index(struct Image *img, int32_t x, int32_t y) {
