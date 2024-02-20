@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
   // TEST(test_set_Nth_bit);
   // TEST(test_get_Nth_bit);
   TEST(test_in_bounds);
-  // TEST(test_compute_index);
+  TEST(test_compute_index);
   // TEST(test_clamp);
   // TEST(test_get_r);
   // TEST(test_get_g);

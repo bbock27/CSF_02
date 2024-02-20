@@ -59,6 +59,18 @@ in_bounds:
 
 	.globl compute_index
 compute_index:
+	/* %rdi = img*
+	*  %rsi = x
+	*  %rdx = y
+	* defaults to returning 0
+	*/ 
+
+	pushq %r13
+
+	imull (%edi), %edx
+	addl %edx, %esi
+	movl %esi, %eax
+	popq %r13
 	ret
 	.globl clamp
 clamp:
@@ -194,9 +206,35 @@ ret
 	.globl draw_pixel
 draw_pixel:
 	/* TODO: implement */
+	/* r12 stores img*
+	*  r13 stores color value
+	*  r14 stores index*/
+	pushq %r12
+	pushq %r13
+	pushq %r14
+
+	movq %rdi, %r12
+	movl %ecx, %r13d
+
+	movl %eax, %r14d
+	call in_bounds
+	cmp %eax, $0
+	je .LDrawReturn
+
+	
+
+
+	
+
+
+	
+
+	.LDrawReturn:
+	//realign stack
+	popq %r14
+	popq %r13
+	popq %r12
 	ret
-
-
 /*
  * Draw a rectangle.
  * The rectangle has rect->x,rect->y as its upper left corner,
