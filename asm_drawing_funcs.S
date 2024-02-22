@@ -118,18 +118,158 @@ ret
 
 	.globl blend_color
 blend_color:
+	/*
+	input = fg, bg, opacity
+	zero registers before use and treat colors as 64 bit
+	then downcast to 8 bit on the return
+	opacity * fg -> %rbx 
+	255 - opacity -> %rbp
+	%rbp * bg -> %r12
+	%rbx + %r12 -> %r13
+	%r13 / 255 -> %rax
+	*/
+
+	pushq %rbx
+	pushq %rbp
+	pushq %r12
+	pushq %r13
+	pushq %r14
+
+	movb %dil, %bl
+	movb %dl, %bl
+	
+	imulq %rbx, %rbx
+
+
 ret
 
 	.globl make_color
 make_color:
+/* %dil (%rdi) = r
+	*  %sil (%rsi) = g
+	*  %dl (%rdx) = b
+	*/ 
+
+	movl $0, %r13d
+	movb %dil, %r13b
+	movb %sil, %r14b
+	movb %dil, %r15b
+
+	movb %r13b, %sil
+	movl %r13d, %edi
+	call set_r
+	movl %eax, %r13d
+
+	movb %r14b, %sil
+	movl %r13d, %edi
+	call set_r
+	movl %eax, %r13d
+
+	movb %r15b, %sil
+	movl %r13d, %edi
+	call set_r
+	movl %eax, %r13d
+
+	movb $255, %sil
+	movl %r13d, %edi
+	call set_r
+
 ret
 
 	.globl blend_colors
 blend_colors:
+	pushq %rbx
+	pushq %rbp
+	pushq %r12
+	pushq %r13
+	pushq %r14
+	pushq %r15
+	pushq %r15
+
+	/*saves fg and bg colors in register*/
+	movl %edi, %ebx
+	movl %esi, %ebp
+
+	/*moves fg into first argument and gets the opacity*/
+	movl %ebx, %edi
+	call get_a
+	movb %al, %r12b
+
+	/*get r value of fg*/
+	movl %ebx, %edi
+	call get_r
+	movb %al, %r13b
+
+	/*gets r value of bg*/
+	movl %ebp, %edi
+	call get_r
+	movb %al, %r14b
+
+	/*blends the r values*/
+	movb %r13b, %bl
+	movb %r14b, %sil
+	movb %r12b, %dl
+	call blend_color
+	movb %al, %r13b
+
+
+	/*get g value of fg*/
+	movl %ebx, %edi
+	call get_r
+	movb %al, %r14b
+
+	/*gets g value of bg*/
+	movl %ebp, %edi
+	call get_r
+	movb %al, %r15b
+
+	/*blends the g values*/
+	movb %r14b, %bl
+	movb %r15b, %sil
+	movb %r12b, %dl
+	call blend_color
+	movb %al, %r14b
+
+
+	/*get b value of fg*/
+	movl %ebx, %edi
+	call get_r
+	movb %al, %r15b
+
+	/*gets b value of bg*/
+	movl %ebp, %edi
+	call get_r
+	movb %al, %bl
+
+	/*blends the b values*/
+	movb %r15b, %bl
+	movb %bl, %sil
+	movb %r12b, %dl
+	call blend_color
+	movb %al, %r15b
+
+
+	movb %r13b, %dil
+	movb %r14b, %sil
+	movb %r15b, %dl
+	call make_color
+
+	popq %r15
+	popq %r15
+	popq %r14
+	popq %r13
+	popq %r12
+	popq %rbp
+	popq %rbx
+
 ret
 
 	.globl set_pixel
 set_pixel:
+	pushq %r14
+	movq IMAGE_DATA_OFFSET(%rdi), %rdi
+	movl %edx, (%rdi, %rsi, 4)
+	popq %r14
 ret
 
 	.globl square
@@ -138,7 +278,7 @@ square:
 	//in %rdi - 64 bit
 	movq %rdi, %rax
 	mulq %rax
-	ret
+ret
 
 	.globl square_dist
 square_dist:
@@ -147,7 +287,6 @@ square_dist:
 	*  %rdx = x2
 	*  %rcx = y2
 	*/ 
-
 	//stack alignment
 	pushq %r12 
 	pushq %r13
@@ -168,7 +307,7 @@ square_dist:
 	movq %r12, %rax
 	popq %r13
 	popq %r12
-	ret
+ret
 
 	.globl is_in_circle
 is_in_circle:
@@ -184,7 +323,7 @@ ret
 
 	.globl rect_in_img
 rect_in_img:
-ret
+ret:
 
 	.globl draw_pixel_no_blending
 draw_pixel_no_blending:
@@ -218,17 +357,14 @@ draw_pixel:
 
 	movl %eax, %r14d
 	call in_bounds
-	cmp %eax, $0
+	cmp $0, %eax
 	je .LDrawReturn
 
-	
+	movq %r12, %rdi
 
-
-	
 
 
 	
-
 	.LDrawReturn:
 	//realign stack
 	popq %r14

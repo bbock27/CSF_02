@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
   // TEST(test_blend_color);
   // TEST(test_make_color);
   // TEST(test_blend_colors);
-  // TEST(test_set_pixel);
+  TEST(test_set_pixel);
   TEST(test_square);
   TEST(test_square_dist);
   // TEST(test_is_in_circle);
