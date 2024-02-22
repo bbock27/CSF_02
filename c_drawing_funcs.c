@@ -116,7 +116,6 @@ uint32_t blend_colors(uint32_t fg, uint32_t bg){
 	uint8_t blended_b = blend_color(fg_b, bg_b, opacity);
 
 	return make_color(blended_r, blended_g, blended_b);
-	// return blend_components(fg, bg, opacity);
 }
 
 //sets the pixel at the specified index to color. NO BLENDING

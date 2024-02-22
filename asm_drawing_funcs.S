@@ -51,7 +51,7 @@ in_bounds:
 	movq $1, %rax
 
 .LReturn:
-	popq %r13
+	popq %r12
 	popq %r13
 	ret
 
@@ -77,28 +77,28 @@ clamp:
 	.globl get_r
 get_r:
     movl %edi, %eax
-    shr %eax, $24
-    and %eax, $0xFF
+    shr $24, %eax
+    and $0xFF, %eax
     ret
 
 	.globl get_g
 get_g:
     movl %edi, %eax
-    shr %eax, $16
-    and %eax, $0xFF
+    shr $16, %eax
+    and $0xFF, %eax
     ret
 
 	.globl get_b
 get_b:
     movl %edi, %eax
-    shr %eax, $8
-    and %eax, $0xFF
+    shr $8, %eax
+    and $0xFF, %eax
     ret
 
 	.globl get_a
 get_a:
     movl %edi, %eax
-    and %eax, $0xFF
+    and $0xFF, %eax
     ret
 
 	.globl set_Nth_bit
@@ -109,27 +109,99 @@ ret
 get_Nth_bit:
 ret
 
-//return color | ((uint32_t)r_component << 24);
+/*return color | ((uint32_t)r_component << 24);
+	This is the translation of hwat we are doing here in C code
+	using a different implementation than MS1 C version becasue
+	we realized there was a much better method to set rgba values
+*/
 	.globl set_r
 set_r:
+	pushq %r13
+	pushq %r14
+
+	movb %sil, %r13b
+	movq $255, %r14
+	shl $24, %r14
+	not %r14d
+
+	and %edi, %r14d
+	
+
+	shl $24, %r13
+	or %r13, %r14
+
+	movq %r14, %rax
+	popq %r14
+	popq %r13
 ret
 
 	.globl set_g
 set_g:
+	pushq %r13
+	pushq %r14
+
+	movb %sil, %r13b
+	movq $255, %r14
+	shl $16, %r14
+	not %r14d
+
+	and %edi, %r14d
+	
+
+	shl $16, %r13
+	or %r13, %r14
+
+	movq %r14, %rax
+	popq %r14
+	popq %r13
 ret
 
 	.globl set_b
 set_b:
+	pushq %r13
+	pushq %r14
+
+	movb %sil, %r13b
+	movq $255, %r14
+	shl $8, %r14
+	not %r14d
+
+	and %edi, %r14d
+	
+
+	shl $8, %r13
+	or %r13, %r14
+
+	movq %r14, %rax
+	popq %r14
+	popq %r13
 ret
 
 	.globl set_a
 set_a:
+	pushq %r13
+	pushq %r14
+
+	movb %sil, %r13b
+	movq $255, %r14
+	not %r14d
+
+	and %edi, %r14d
+	
+	or %r13, %r14
+
+	movq %r14, %rax
+	popq %r14
+	popq %r13
 ret
 
 	.globl blend_color
 blend_color:
 	/*
 	input = fg, bg, opacity
+	fg -> %dil
+	bg -> %sil
+	opacity -> %dl
 	zero registers before use and treat colors as 64 bit
 	then downcast to 8 bit on the return
 	opacity * fg -> %rbx 
@@ -144,12 +216,43 @@ blend_color:
 	pushq %r12
 	pushq %r13
 	pushq %r14
+	pushq %r15
+	pushq %r15
 
+	movq $0, %rbx
 	movb %dil, %bl
-	movb %dl, %bl
+	movq $0, %r14
+	movb %dl, %r14b
 	
-	imulq %rbx, %rbx
+	/*opacity * fg*/
+	imulq %r14, %rbx
 
+	/*subtraction part of (255-opacity) * bg*/
+	movq $0, %rbp
+	movb %r14b, %bpl
+	movq $255, %r15
+	sub %bpl, %r15b
+	movb %r15b, %bpl
+
+	/*multiplication part of (255-opacity) * bg*/
+	movb %sil, %r12b
+	imulq %rbp, %r12
+
+	/*opacity scaled fg + opacity scaled bg*/
+	addq %rbx, %r12
+	movq $255, %rbp
+
+	movq $0, %rdx
+	movq %r12, %rax
+	idivq %rbp
+
+	popq %r15
+	popq %r15
+	popq %r14
+	popq %r13
+	popq %r12
+	popq %rbp
+	popq %rbx
 
 ret
 
@@ -159,30 +262,52 @@ make_color:
 	*  %sil (%rsi) = g
 	*  %dl (%rdx) = b
 	*/ 
+	pushq %r12
+	pushq %r13
+	pushq %r14
+	pushq %r15
 
-	movl $0, %r13d
+	movq $0, %r12
+	movq $0, %r13
+	movq $0, %r14
+	movq $0, %r15
+
+
 	movb %dil, %r13b
 	movb %sil, %r14b
-	movb %dil, %r15b
+	movb %dl, %r15b
 
+	movq $0, %rdi
+	movq $0, %rsi
+	movl %r12d, %edi
 	movb %r13b, %sil
-	movl %r13d, %edi
 	call set_r
-	movl %eax, %r13d
+	movl %eax, %r12d
 
+	movq $0, %rdi
+	movq $0, %rsi
 	movb %r14b, %sil
-	movl %r13d, %edi
-	call set_r
-	movl %eax, %r13d
+	movl %r12d, %edi
+	call set_g
+	movl %eax, %r12d
 
+	movq $0, %rdi
+	movq $0, %rsi
 	movb %r15b, %sil
-	movl %r13d, %edi
-	call set_r
-	movl %eax, %r13d
+	movl %r12d, %edi
+	call set_b
+	movl %eax, %r12d
 
+	movq $0, %rdi
+	movq $0, %rsi
 	movb $255, %sil
-	movl %r13d, %edi
-	call set_r
+	movl %r12d, %edi
+	call set_a
+
+	popq %r15
+	popq %r14
+	popq %r13
+	popq %r12
 
 ret
 
@@ -195,6 +320,13 @@ blend_colors:
 	pushq %r14
 	pushq %r15
 	pushq %r15
+
+	movq $0, %rbx
+	movq $0, %rbp
+	movq $0, %r12
+	movq $0, %r13
+	movq $0, %r14
+	movq $0, %r15
 
 	/*saves fg and bg colors in register*/
 	movl %edi, %ebx
@@ -216,7 +348,7 @@ blend_colors:
 	movb %al, %r14b
 
 	/*blends the r values*/
-	movb %r13b, %bl
+	movb %r13b, %dil
 	movb %r14b, %sil
 	movb %r12b, %dl
 	call blend_color
@@ -225,16 +357,16 @@ blend_colors:
 
 	/*get g value of fg*/
 	movl %ebx, %edi
-	call get_r
+	call get_g
 	movb %al, %r14b
 
 	/*gets g value of bg*/
 	movl %ebp, %edi
-	call get_r
+	call get_g
 	movb %al, %r15b
 
 	/*blends the g values*/
-	movb %r14b, %bl
+	movb %r14b, %dil
 	movb %r15b, %sil
 	movb %r12b, %dl
 	call blend_color
@@ -243,16 +375,16 @@ blend_colors:
 
 	/*get b value of fg*/
 	movl %ebx, %edi
-	call get_r
+	call get_b
 	movb %al, %r15b
 
 	/*gets b value of bg*/
 	movl %ebp, %edi
-	call get_r
+	call get_b
 	movb %al, %bl
 
 	/*blends the b values*/
-	movb %r15b, %bl
+	movb %r15b, %dil
 	movb %bl, %sil
 	movb %r12b, %dl
 	call blend_color
@@ -357,10 +489,20 @@ draw_pixel:
 	/* TODO: implement */
 	/* r12 stores img*
 	*  r13 stores color value
-	*  r14 stores index*/
+	*  r14 stores index
+	*  rbx stores x
+	*  rbp stores y*/
 	pushq %r12
 	pushq %r13
 	pushq %r14
+	pushq %rbx
+	pushq %rbp
+
+	movq $0, %r13
+	movq $0, %r14
+
+	movq %rsi, %rbx
+	movq %rdx, %rbp
 
 	movq %rdi, %r12
 	movl %ecx, %r13d
@@ -370,13 +512,33 @@ draw_pixel:
 	cmp $0, %eax
 	je .LDrawReturn
 
+	/*gets index from xy*/
 	movq %r12, %rdi
+	movq %rbx, %rsi
+	movq %rdx, %rbp
+	call compute_index
+	movq %rax, %r14
+	/*rbx and rbp are now freed up 
+	* as we dont need x or y anymore*/
+
+	/*get new color*/
+	movq IMAGE_DATA_OFFSET(%r12), %rbx
+	movl (%rbx, %r14, 4), %esi
+
+	movl %r13d, %edi
+
+	call blend_colors
+
+	movl %eax, %edx
+	movq %r12, %rdi
+	movl %r14d, %esi
+	call set_pixel
 
 
-
-	
 	.LDrawReturn:
 	//realign stack
+	popq %rbp
+	popq %rbx
 	popq %r14
 	popq %r13
 	popq %r12

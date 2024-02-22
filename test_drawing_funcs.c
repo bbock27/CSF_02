@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
   TEST_INIT();
 
   // TODO: add TEST() directives for your helper functions
-  // TEST(test_draw_pixel);
+  TEST(test_draw_pixel);
   // TEST(test_draw_rect);
   // TEST(test_draw_circle);
   // TEST(test_draw_circle_clip);
@@ -130,17 +130,17 @@ int main(int argc, char **argv) {
   TEST(test_in_bounds);
   TEST(test_compute_index);
   // TEST(test_clamp);
-  // TEST(test_get_r);
-  // TEST(test_get_g);
-  // TEST(test_get_b);
-  // TEST(test_get_a);
-  // TEST(test_set_r);
-  // TEST(test_set_g);
-  // TEST(test_set_b);
-  // TEST(test_set_a);
-  // TEST(test_blend_color);
-  // TEST(test_make_color);
-  // TEST(test_blend_colors);
+  TEST(test_get_r);
+  TEST(test_get_g);
+  TEST(test_get_b);
+  TEST(test_get_a);
+  TEST(test_set_r);
+  TEST(test_set_g);
+  TEST(test_set_b);
+  TEST(test_set_a);
+  TEST(test_blend_color);
+  TEST(test_make_color);
+  TEST(test_blend_colors);
   TEST(test_set_pixel);
   TEST(test_square);
   TEST(test_square_dist);
@@ -372,16 +372,16 @@ void test_get_Nth_bit(TestObjs *objs){
 void test_in_bounds(TestObjs *objs){
 
   //past top left corner
-  // ASSERT(in_bounds(&objs->small, -1, 0) == 0);
-  // ASSERT(in_bounds(&objs->small, 0, -1) == 0);
+  ASSERT(in_bounds(&objs->small, -1, 0) == 0);
+  ASSERT(in_bounds(&objs->small, 0, -1) == 0);
 
   //past top right corner
   ASSERT(in_bounds(&objs->small, 0, 8) == 0);
-  // ASSERT(in_bounds(&objs->small, 7, -1) == 0);
+  ASSERT(in_bounds(&objs->small, 7, -1) == 0);
 
   //past bottom left corner
   ASSERT(in_bounds(&objs->small, 0, 6) == 0);
-  // ASSERT(in_bounds(&objs->small, -1, 5) == 0);
+  ASSERT(in_bounds(&objs->small, -1, 5) == 0);
 
   //past bottom right corner
   ASSERT(in_bounds(&objs->small, 8, 5) == 0);
