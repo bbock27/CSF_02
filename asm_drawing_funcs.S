@@ -21,8 +21,6 @@
    they can be called from the unit test code.
  ***********************************************************************/
 
-/* TODO: implement your helper functions here */
-
 	.globl in_bounds
 in_bounds:
 	/* %rdi = img*
@@ -78,19 +76,30 @@ clamp:
 
 	.globl get_r
 get_r:
-ret
+    movl %edi, %eax
+    shr %eax, $24
+    and %eax, $0xFF
+    ret
 
 	.globl get_g
 get_g:
-ret
+    movl %edi, %eax
+    shr %eax, $16
+    and %eax, $0xFF
+    ret
 
 	.globl get_b
 get_b:
-ret
+    movl %edi, %eax
+    shr %eax, $8
+    and %eax, $0xFF
+    ret
 
 	.globl get_a
 get_a:
-ret
+    movl %edi, %eax
+    and %eax, $0xFF
+    ret
 
 	.globl set_Nth_bit
 set_Nth_bit:
@@ -100,6 +109,7 @@ ret
 get_Nth_bit:
 ret
 
+//return color | ((uint32_t)r_component << 24);
 	.globl set_r
 set_r:
 ret

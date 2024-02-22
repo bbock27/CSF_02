@@ -192,7 +192,6 @@ void draw_pixel_no_blending(struct Image *img, int32_t x, int32_t y, uint32_t co
 //   color - uint32_t color value
 //
 void draw_pixel(struct Image *img, int32_t x, int32_t y, uint32_t color) {
-  // TODO: implement
 	if(!in_bounds(img, x, y)){
 		return;
 	}
@@ -274,8 +273,6 @@ void draw_tile(struct Image *img,
 			if(in_bounds(img, x+i, j+y) && in_bounds(tilemap, i+tile->x, j+tile->y)){
 				uint32_t tilemap_index = compute_index(tilemap, i+tile->x, j+tile->y);
 				draw_pixel_no_blending(img, x+i, j+y, tilemap->data[tilemap_index]);
-        		// set_pixel(img, img_index, tilemap->data[tilemap_index]);
-				// img->data[img_index] = tilemap->data[tilemap_index];
 			}
 		}
 	}
@@ -307,12 +304,8 @@ void draw_sprite(struct Image *img,
 	for(uint32_t i = 0; i < sprite->width; i++){
 		for(uint32_t j = 0; j < sprite->height; j++){
 			if(in_bounds(img, x+i, j+y) && in_bounds(spritemap, i+sprite->x, j+sprite->y)){
-        // uint32_t img_index = compute_index(img, x+i+sprite->x, j+y+sprite->y);
         uint32_t sprite_index = compute_index(spritemap, i+sprite->x, j+sprite->y);
-        // uint32_t newColor = blend_colors(spritemap->data[sprite_index], img->data[img_index]);
-        // set_pixel(img, img_index, newColor);
 				draw_pixel(img, x+i, j+y, spritemap->data[sprite_index]);
-				// img->data[compute_index(img, x+i+tile->x, j+y+tile->y)] = tilemap->data[compute_index(tilemap, i+tile->x, j+tile->y)];
 			}
 		}
 	}
