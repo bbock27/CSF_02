@@ -28,6 +28,31 @@
 				}
 		]
 	},
+	{
+		"name": "asm debugger secret",
+		"type": "cppdbg",
+		"request": "launch",
+		"program": "/home/csf23027/CSF/CSF_02/asm_test_drawing_funcs_secret",
+		"args": [],
+		"stopAtEntry": false,
+		"cwd": "${fileDirname}",
+		"environment": [],
+		"externalConsole": false,
+		"MIMode": "gdb",
+		"setupCommands": [
+				{
+						"description": "Enable pretty-printing for gdb",
+						"text": "-enable-pretty-printing",
+						"ignoreFailures": true
+				},
+				{
+						"description": "Set Disassembly Flavor to Intel",
+						"text": "-gdb-set disassembly-flavor intel",
+						"ignoreFailures": true
+				}
+		]
+	},
+	
 		{
 			"name": "My Debugger",
 			"type": "cppdbg",
