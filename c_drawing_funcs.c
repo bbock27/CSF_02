@@ -163,7 +163,8 @@ int is_in_rect(struct Image* image, const struct Rect* rect, int32_t x, int32_t 
 }
 
 int rect_in_img(struct Image* image, const struct Rect* rect){
-	if(rect->x >= 0 && rect->y >= 0 && rect->x <= (image->width - rect->width) && rect->y <= (image->height-rect->height)){
+	if(is_in_range(rect->x, 0, (image->width - rect->width)) && is_in_range(rect->y, 0, (image->height - rect->height))){
+	// if(rect->x >= 0 && rect->y >= 0 && rect->x <= (image->width - rect->width) && rect->y <= (image->height-rect->height)){
 		return 1;
 	}
 	return 0;

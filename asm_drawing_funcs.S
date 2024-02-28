@@ -485,7 +485,6 @@ square_dist:
   popq %r12
 	ret
 
-/*not implemented becasue not necessary for MS2*/
   .globl is_in_circle
 is_in_circle:
 	pushq %r13
@@ -521,10 +520,10 @@ is_in_circle:
 
   .globl is_in_range
 is_in_range:
-/* edi = val
-	 edi = min
-	 edx = max
-*/
+	/* edi = val
+		edi = min
+		edx = max
+	*/
 	movq $0, %rax  /* default to returning false */
 	cmp %edi, %esi /*compare val to min*/
 	jg .LendBoundsCheck
@@ -535,7 +534,6 @@ is_in_range:
 	.LendBoundsCheck:
 	ret
 
-/*not implemented becasue not necessary for MS2*/
   .globl is_in_rect
 is_in_rect:
 	pushq %rbx
@@ -549,7 +547,6 @@ is_in_rect:
 	movq %rdx, %r12 /* store x */
 	movq %rcx, %r13 /* store y */
 
-/*  */
 	movl RECT_X_OFFSET(%rbp), %r10d /* get rect->x */
 	movl RECT_WIDTH_OFFSET(%rbp), %edx /* get rect->width */
 	subl $1, %edx /* subtract one form rect->width */
@@ -582,14 +579,93 @@ is_in_rect:
 
 	ret
 
-/*not implemented becasue not necessary for MS2*/
   .globl rect_in_img
 rect_in_img:
-	ret:
+	pushq %rbx
+	pushq %rbp
+	pushq %r12 
+	pushq %r13
+	pushq %r14
+ /*  */
+	movq %rdi, %rbx /* store img* */
+	movq %rsi, %rbp /* store rect* */
+
+	movl IMAGE_WIDTH_OFFSET(%rbp), %edx
+	subl RECT_WIDTH_OFFSET(%rbp), %edx
+
+	movl RECT_X_OFFSET(%rbp), %edi
+	movq $0, %rsi
+	cmp $0, %rax
+	je .LrectNotInImage
+
+
+	movl IMAGE_HEIGHT_OFFSET(%rbp), %edx
+	subl RECT_HEIGHT_OFFSET(%rbp), %edx
+
+	movl RECT_Y_OFFSET(%rbp), %edi
+	movq $0, %rsi
+	cmp $0, %rax
+	je .LrectNotInImage
+	movq $1, %rax
+
+
+	.LrectNotInImage:
+	popq %r14
+	popq %r13
+	popQ %r12
+	popq %rbp
+	popq %rbx
+	ret
 
 /*not implemented becasue not necessary for MS2*/
   .globl draw_pixel_no_blending
 draw_pixel_no_blending:
+/* r12 stores img*
+  *  r13 stores color value
+  *  r14 stores index
+  *  rbx stores x
+  *  rbp stores y*/
+  pushq %r12
+  pushq %r13
+  pushq %r14
+  pushq %rbx
+  pushq %rbp
+
+  movq $0, %r14
+
+  /*store arguments in preserved registers*/
+	movq %rdi, %r12
+	movq %rsi, %rbx
+  movq %rdx, %rbp
+	movq %rcx, %r13
+
+
+  /*check if x y coord is in bounds of img*/
+  movl %eax, %r14d
+  call in_bounds
+  cmp $0, %eax
+  je .LDrawReturn
+
+  /*gets index from xy*/
+  movq %r12, %rdi
+  movq %rbx, %rsi
+  movq %rdx, %rbp
+  call compute_index
+  movq %rax, %r14
+
+  /*sets pixel at correct index to new color*/
+  movq %r12, %rdi /* set img* to first argument*/
+	movl %r14d, %esi /* set index to first argument*/
+	movl %eax, %edx /* set color to first argument*/
+  call set_pixel
+
+
+  .LDrawReturn:
+  popq %rbp
+  popq %rbx
+  popq %r14
+  popq %r13
+  popq %r12
 	ret
 
 /***********************************************************************
@@ -607,7 +683,6 @@ draw_pixel_no_blending:
  */
   .globl draw_pixel
 draw_pixel:
-  /* TODO: implement */
   /* r12 stores img*
   *  r13 stores color value
   *  r14 stores index
@@ -632,7 +707,7 @@ draw_pixel:
   movl %eax, %r14d
   call in_bounds
   cmp $0, %eax
-  je .LDrawReturn
+  je .LDrawNBReturn
 
   /*gets index from xy*/
   movq %r12, %rdi
@@ -658,7 +733,7 @@ draw_pixel:
   call set_pixel
 
 
-  .LDrawReturn:
+  .LDrawNBReturn:
   popq %rbp
   popq %rbx
   popq %r14

@@ -128,9 +128,9 @@ int main(int argc, char **argv) {
   TEST(test_draw_circle);
 	TEST(test_draw_circle2);
 	TEST(test_draw_circle3);
-  // TEST(test_draw_circle_clip);
-  // TEST(test_draw_tile);
-  // TEST(test_draw_sprite);
+  TEST(test_draw_circle_clip);
+  TEST(test_draw_tile);
+  TEST(test_draw_sprite);
 
   // TEST(test_set_Nth_bit);
   // TEST(test_get_Nth_bit);
