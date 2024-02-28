@@ -538,6 +538,48 @@ is_in_range:
 /*not implemented becasue not necessary for MS2*/
   .globl is_in_rect
 is_in_rect:
+	pushq %rbx
+	pushq %rbp
+	pushq %r12 
+	pushq %r13
+	pushq %r14
+
+	movq %rdi, %rbx /* store img* */
+	movq %rsi, %rbp /* store rect pointer */
+	movq %rdx, %r12 /* store x */
+	movq %rcx, %r13 /* store y */
+
+/*  */
+	movl RECT_X_OFFSET(%rbp), %r10d /* get rect->x */
+	movl RECT_WIDTH_OFFSET(%rbp), %edx /* get rect->width */
+	subl $1, %edx /* subtract one form rect->width */
+	addl %r10d, %edx /* (rect->x + rect->width - 1) into third argument */
+
+	movl %r12d, %edi /* move x into first argument */
+	movl RECT_X_OFFSET(%rbp), %esi/* move rect->x into second armugent */
+	call is_in_range /* checks if x is inside the rectangle */
+	cmp $0, %rax
+	je .LnotInRect
+
+	movl RECT_Y_OFFSET(%rbp), %r10d /* get rect->y */
+	movl RECT_HEIGHT_OFFSET(%rbp), %edx /* get rect->height */
+	subl $1, %edx /* subtract one form rect->height */
+	addl %r10d, %edx /* (rect->y + rect->height - 1) into third argument */
+
+	movl %r13d, %edi /* move y into first argument */
+	movl RECT_Y_OFFSET(%rbp), %esi/* move rect->y into second armugent */
+	call is_in_range /* checks if y is inside the rectangle */
+	cmp $0, %rax
+	je .LnotInRect
+	movq $1, %rax
+
+	.LnotInRect:
+	popq %r14
+	popq %r13
+	popQ %r12
+	popq %rbp
+	popq %rbx
+
 	ret
 
 /*not implemented becasue not necessary for MS2*/
@@ -635,7 +677,65 @@ draw_pixel:
  */
   .globl draw_rect
 draw_rect:
-  /* TODO: implement */
+  /* rbx -> img pointer
+		 rbp -> rect pointer
+		 r12 -> color
+		 r13 -> i counter
+		 r14 -> j counter
+
+	*/
+	 /*  */
+
+
+	pushq %rbx
+	pushq %rbp
+	pushq %r12
+	pushq %r13
+	pushq %r14
+
+
+	movq %rdi, %rbx /* store img* */
+	movq %rsi, %rbp /* store rect* */
+	movq %rdx, %r12 /* store color*/
+
+	movq $0, %r13 /*initialize i counter*/
+	movq $0, %r14 /*initialize j counter*/
+
+
+	jmp .LRectCheckOuterLoopCondition /* enter the loop */
+
+	.LRectUpdateOuterLoopCondition:
+	add $1, %r13  /* i ++ */
+	movq $0, %r14  /* set j = 0 */
+	.LRectCheckOuterLoopCondition:
+	cmpl %r13d, IMAGE_WIDTH_OFFSET(%rbx)  /* check if image width <= i */
+	jle .LRectEnd
+	jmp .LRectCheckInnerLoopCondition
+		.LRectUpdateInnerLoopCondition:
+		addq $1, %r14 /* j++ */
+		.LRectCheckInnerLoopCondition:
+		cmpl %r14d, IMAGE_HEIGHT_OFFSET(%rbx) /* check if image height <= j */
+		jle .LRectUpdateOuterLoopCondition
+			movq %rbx, %rdi  /* move img* into first argument */
+			movq %rbp, %rsi  /* move rect into second argument */
+			movq %r13, %rdx  /* move i into third argument */
+			movq %r14, %rcx  /* move j into fourth argument */
+			call is_in_rect
+			cmp $0, %rax /* check if is_in_rect returned false(0) */
+			je .LRectUpdateInnerLoopCondition
+				movq %rbx, %rdi  /* move img* into first argument */
+				movq %r13, %rsi /* move i into second argument */
+				movq %r14, %rdx /* move j into third argument */
+				movl %r12d, %ecx /* move color into fourth argument */
+				call draw_pixel
+				jmp .LRectUpdateInnerLoopCondition /* go back to next iteration of inner loop */
+
+	.LRectEnd:
+	popq %r14
+	popq %r13
+	popq %r12
+	popq %rbp
+	popq %rbx
   ret
 
 /*
@@ -651,20 +751,19 @@ draw_rect:
  */
   .globl draw_circle
 draw_circle:
-  /* TODO: implement */
-	
+  /* pseudo code for how control flow of loop works */
 	/*initialize outer loop stuff*/
 	/*i condition*/
 	/*fails, jump to return*/
 	/*out loop body*/
 		/*initialize inner loop variables*/
 		/*inner loop condition*/
-		/*if it fails jump to outer loop condition*/
+		/*if it fails jump to outer loop update*/
 		/*inner loop body*/
 			/*check bounds*/
-			/*if out of bounds jump to inner loop condition*/
+			/*if out of bounds jump to inner loop update*/
 		/*update j and jump to inner loop condition*/
-	/*update i and jump to outer loop condition*/
+	/*update i, set j = 0 and jump to outer loop condition*/
 	
 	/* rbx -> img pointer
 		 rbp -> used for stack allocation of variables

@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 
   // TODO: add TEST() directives for your helper functions
   TEST(test_draw_pixel);
-  // TEST(test_draw_rect);
+  TEST(test_draw_rect);
   TEST(test_draw_circle);
 	TEST(test_draw_circle2);
 	TEST(test_draw_circle3);
@@ -153,7 +153,7 @@ int main(int argc, char **argv) {
   TEST(test_square_dist);
   TEST(test_is_in_circle);
   TEST(test_is_in_range);
-  // TEST(test_is_in_rect);
+  TEST(test_is_in_rect);
 
   TEST_FINI();
 }
@@ -234,10 +234,7 @@ void test_draw_circle2(TestObjs *objs) {
 }
 
 void test_draw_circle3(TestObjs *objs) {
-	printf("\n%d\n", &objs->command);
   draw_circle(&objs->command, 51, 67, 61, 0x7602D1ff);
-	
-
 }
 
 void test_draw_circle_clip(TestObjs *objs) {
