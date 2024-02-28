@@ -415,3 +415,9 @@ c_drawing_funcs.o
 c_test_drawing_funcs
 c_test_drawing_funcs_secret
 test_drawing_funcs.o
+*/*.o
+*.o
+asm_draw
+asm_test_drawing_funcs
+*/*.json
+*.json
