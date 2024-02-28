@@ -1,5 +1,6 @@
 /*
  * Assembly-language implementations of the drawing functions
+ * valgrind -s --track-origins=yes ./asm_test_drawing_funcs
  */
 
 /* Offsets of struct Image fields */
@@ -36,7 +37,7 @@ in_bounds:
   /*if out of bounds, jump to .LReturn
   need to imolement jumps but not sure which one to use
   width - x*/
-  cmp %esi, (%r13d)
+  cmpl %esi, (%r13)
   jle .LReturn
   cmp $0, %esi
   jl .LReturn
@@ -50,10 +51,10 @@ in_bounds:
   //if in bounds
   movq $1, %rax
 
-.LReturn:
-  popq %r12
-  popq %r13
-  ret
+	.LReturn:
+		popq %r12
+		popq %r13
+	ret
 
   .globl compute_index
 compute_index:
@@ -64,14 +65,14 @@ compute_index:
   */ 
 
   pushq %r13
-  imull (%edi), %edx
+  imull (%rdi), %edx
   addl %edx, %esi
   movl %esi, %eax
   popq %r13
   ret
 
 
-/*not implemented becasue not necessary for MS2*/
+	/*not implemented becasue not necessary for MS2*/
   .globl clamp
 clamp:
   ret
@@ -138,7 +139,7 @@ set_r:
   movq %r14, %rax
   popq %r14
   popq %r13
-ret
+	ret
 
   .globl set_g
 set_g:
@@ -161,7 +162,7 @@ set_g:
   movq %r14, %rax
   popq %r14
   popq %r13
-ret
+	ret
 
   .globl set_b
 set_b:
@@ -183,7 +184,7 @@ set_b:
   movq %r14, %rax
   popq %r14
   popq %r13
-ret
+	ret
 
   .globl set_a
 set_a:
@@ -203,7 +204,7 @@ set_a:
   movq %r14, %rax
   popq %r14
   popq %r13
-ret
+	ret
 
   .globl blend_color
 blend_color:
@@ -233,8 +234,7 @@ blend_color:
 
   movq $0, %rbx
   movb %dil, %bl
-  movq $0, %r14
-  movb %dl, %r14b
+  movzbq %dl, %r14
   
   /*opacity * fg*/
   imulq %r14, %rbx
@@ -247,7 +247,7 @@ blend_color:
   movb %r15b, %bpl
 
   /*multiplication part of (255-opacity) * bg*/
-  movb %sil, %r12b
+  movzbq %sil, %r12
   imulq %rbp, %r12
 
   /*opacity scaled fg + opacity scaled bg*/
@@ -267,7 +267,7 @@ blend_color:
   popq %rbp
   popq %rbx
 
-ret
+	ret
 
   .globl make_color
 make_color:
@@ -329,7 +329,7 @@ make_color:
   popq %r13
   popq %r12
 
-ret
+	ret
 
   .globl blend_colors
 blend_colors:
@@ -429,7 +429,7 @@ blend_colors:
   popq %rbp
   popq %rbx
 
-ret
+	ret
 
   .globl set_pixel
 set_pixel:
@@ -437,7 +437,7 @@ set_pixel:
   movq IMAGE_DATA_OFFSET(%rdi), %rdi
   movl %edx, (%rdi, %rsi, 4)
   popq %r14
-ret
+	ret
 
   .globl square
 square:
@@ -446,7 +446,7 @@ square:
   */
   movq %rdi, %rax
   mulq %rax
-ret
+	ret
 
   .globl square_dist
 square_dist:
@@ -458,21 +458,29 @@ square_dist:
   //stack alignment
   pushq %r12 
   pushq %r13
+	pushq %r14
 
-  //need to handle underflow somehow
-  //right now only works if x1>x2 and y1>y2
+	/*x1-x2*/
   movq %rdi, %r12
   subq %rdx, %r12
+
+	/*y1-y2*/
   movq %rsi, %r13
   subq %rcx, %r13
+
   movq %r12, %rdi
   call square
   movq %rax, %r12
+
   movq %r13, %rdi
   call square
   movq %rax, %r13
+
+
   addq %r13, %r12
   movq %r12, %rax
+
+	popq %r14
   popq %r13
   popq %r12
 	ret
@@ -480,30 +488,67 @@ square_dist:
 /*not implemented becasue not necessary for MS2*/
   .globl is_in_circle
 is_in_circle:
+	pushq %r13
+	pushq %r14
+	movq %r9, %r13 /*saves radius values in r13*/
+
+	/*lines up parameters for square_dist function*/
+	movq %rsi, %rdi
+	movq %rdx, %rsi
+	movq %rcx, %rdx
+	movq %r8, %rcx
+
+	call square_dist
+	movq $0, %r14
+	movl %eax, %r14d
+
+	movq %r13, %rdi
+	call square
+	cmp %eax, %r14d
+	jg .LnotInCircle
+	movq $1, %rax
+	jmp .LcircleCheckEnd
+	
+	.LnotInCircle:
+	movq $0, %rax
+
+	.LcircleCheckEnd:
+	popq %r14
+	popq %r13
+
 	ret
 
-/*not implemented becasue not necessary for MS2*/
+
   .globl is_in_range
 is_in_range:
-	movq $0, %rax
-	cmp %rdi, %rsi
-	
-ret
+/* edi = val
+	 edi = min
+	 edx = max
+*/
+	movq $0, %rax  /* default to returning false */
+	cmp %edi, %esi /*compare val to min*/
+	jg .LendBoundsCheck
+	cmp %edi, %edx  /* compare val to max */
+	jl .LendBoundsCheck
+	movq $1, %rax 
+
+	.LendBoundsCheck:
+	ret
 
 /*not implemented becasue not necessary for MS2*/
   .globl is_in_rect
 is_in_rect:
-ret
+	ret
 
 /*not implemented becasue not necessary for MS2*/
   .globl rect_in_img
 rect_in_img:
-ret:
+	ret:
 
 /*not implemented becasue not necessary for MS2*/
   .globl draw_pixel_no_blending
 draw_pixel_no_blending:
-ret
+	ret
 
 /***********************************************************************
    Public API functions
@@ -607,6 +652,98 @@ draw_rect:
   .globl draw_circle
 draw_circle:
   /* TODO: implement */
+	
+	/*initialize outer loop stuff*/
+	/*i condition*/
+	/*fails, jump to return*/
+	/*out loop body*/
+		/*initialize inner loop variables*/
+		/*inner loop condition*/
+		/*if it fails jump to outer loop condition*/
+		/*inner loop body*/
+			/*check bounds*/
+			/*if out of bounds jump to inner loop condition*/
+		/*update j and jump to inner loop condition*/
+	/*update i and jump to outer loop condition*/
+	
+	/* rbx -> img pointer
+		 rbp -> used for stack allocation of variables
+		 		radius and color stored on stack
+		 r12 -> x
+		 r13 -> y
+		 r14 -> i counter
+		 r15 -> j counter
+
+		 stack:
+		 -4(%rbp) = radius
+		 -8(%rbp) = color
+	*/
+	 /*  */
+
+
+	pushq %rbx
+	pushq %r12
+	pushq %r13
+	pushq %r14
+	pushq %r15
+
+	pushq %rbp
+	movq %rsp, %rbp 
+	subq $8, %rsp
+
+	movq %rdi, %rbx /* store img* */
+	movq %rsi, %r12 /* store x */
+	movq %rdx, %r13 /* store y*/
+
+	movq $0, %r14 /*initialize i counter*/
+	movq $0, %r15 /*initialize j counter*/
+	movl %ecx, -4(%rbp) /*store the radius onto the stack */
+	movl %r8d, -8(%rbp) /*store the color onto the stack */
+
+
+	jmp .LcheckOuterLoopCondition /* enter the loop */
+
+	.LupdateOuterLoopCondition:
+	add $1, %r14  /* i ++ */
+	movq $0, %r15  /* set j = 0 */
+	.LcheckOuterLoopCondition:
+	cmpl %r14d, IMAGE_WIDTH_OFFSET(%rbx)  /* check if image width <= i */
+	jle .Lend
+	jmp .LcheckInnerLoopCondition
+		.LupdateInnerLoopCondition:
+		addq $1, %r15 /* j++ */
+		.LcheckInnerLoopCondition:
+		cmpl %r15d, IMAGE_HEIGHT_OFFSET(%rbx) /* check if image height <= j */
+		jle .LupdateOuterLoopCondition
+		movq %rbx, %rdi  /* move img* into first argument */
+		movq %r12, %rsi  /* move x into second argument */
+		movq %r13, %rdx  /* move y into third argument */
+		movq %r14, %rcx  /* move i into fourth argument */
+		movq %r15, %r8  /* move j into fifth argument */
+		movl -4(%rbp), %r9d  /* move radius into sixth argument */
+		call is_in_circle
+		cmp $0, %rax /* check if is_in_circle returned false(0) */
+		je .LupdateInnerLoopCondition
+		movq %rbx, %rdi  /* move img* into first argument */
+		movq %r14, %rsi /* move i into second argument */
+		movq %r15, %rdx /* move j into third argument */
+		movl -8(%rbp), %ecx /* move color into fourth argument */
+		call draw_pixel
+		jmp .LupdateInnerLoopCondition /* go back to next iteration of inner loop */
+
+	.Lend:
+
+	addq $8, %rsp /* deallocate local variables on stack */
+	popq %rbp
+
+
+	popq %r15
+	popq %r14
+	popq %r13
+	popq %r12
+	popq %rbx
+
+
   ret
 
 /*
